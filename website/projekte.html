@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Lebenslauf</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Header -->
+			<header id="header">
+				<a href="index.html" class="title">Aleksander Bauer</a>
+				<nav>
+					<ul>
+						<li><a href="index.html">Home</a></li>
+						<li><a href="lebenslauf.html" class="active">Lebenslauf</a></li>
+
+					</ul>
+				</nav>
+			</header>
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<section id="main" class="wrapper">
+						<div class="inner">
+							<h1 class="major">Cloud / IT Projekte</h1>
+
+								<h2>Cloud Resume</h2>
+									<p> Ich habe ein Cloud-Resume-Projekt erstellt, das moderne AWS-Technologien nutzt, um eine vollständig gehostete, dynamische Webseite bereitzustellen.
+
+										Dafür habe ich HTML und CSS verwendet, um das Resume als statische Webseite zu gestalten und mit Amazon S3 als statische Website zu hosten. Um HTTPS zu ermöglichen, habe ich CloudFront genutzt und mit Route 53 eine eigene Domain eingebunden.
+										
+										Ein Besucherzähler wurde mit JavaScript implementiert, wobei die Zugriffszahlen in DynamoDB gespeichert werden. Die Kommunikation zwischen Frontend und Datenbank erfolgt über eine API, die mit API Gateway und Lambda (Python, boto3) umgesetzt wurde.
+										
+										Die gesamte Infrastruktur wurde mit AWS SAM (Infrastructure as Code) definiert und über GitHub Actions (CI/CD) automatisiert bereitgestellt. Das Frontend-Repo sorgt für Updates des S3-Buckets, während das Backend-Repo Änderungen an der API testet und ausrollt.
+
+								<h2>View Counter</h2>
+									<p> Ich habe den View Counter mit JavaScript implementiert, der über eine API Gateway-Anfrage eine AWS Lambda-Funktion aufruft, die den Besucherzähler in einer DynamoDB-Tabelle speichert und aktualisiert. 
+ 
+							   <h2>Finanz-Newsletter</h2>
+							   		<p> Ich habe eine automatisierte Finanz-News-Webseite entwickelt, die täglich große Marktveränderungen und anstehende Events aus verschiedenen Quellen aggregiert.
+										 Dazu nutze ich AWS Lambda für die Datenverarbeitung, Amazon DynamoDB zur Speicherung, sowie API Gateway für dynamische Abrufe. Die Daten stammen aus Finanz-APIs, 
+										 Web-Scraping und der Twitter API. Die Webseite wird mit React und AWS Amplify oder S3 + CloudFront gehostet. Zusätzlich sorgen EventBridge für automatisierte Updates und Amazon Comprehend für Sentiment-Analysen. Damit habe ich eine skalierbare und cloudbasierte Lösung geschaffen, die Finanzdaten effizient aufbereitet und visualisiert. 
+
+							
+							<p></p>
+						</div>
+					</section>
+
+			</div>
+
+		<!-- Footer -->
+			<footer id="footer" class="wrapper alt">
+				<div class="inner">
+					<ul class="menu">
+						
+					</ul>
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
