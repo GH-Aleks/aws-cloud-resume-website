@@ -1,0 +1,4 @@
+{
+    "github.copilot.chat.codeGeneration.instructions": ["@workspace"],
+    "github.copilot.advanced": {}
+}
