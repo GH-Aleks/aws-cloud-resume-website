@@ -27,25 +27,40 @@
 				<!-- Main -->
 					<section id="main" class="wrapper">
 						<div class="inner">
-							<h1 class="major">Cloud / IT Projekte</h1>
+							<h1 class="major">Meine Cloud-Projekte: Praktische Erfahrungen mit AWS</h1>
 
-								<h2>Cloud Resume</h2>
-									<p> Ich habe ein Cloud-Resume-Projekt erstellt, das moderne AWS-Technologien nutzt, um eine vollständig gehostete, dynamische Webseite bereitzustellen.
+							<h2>Cloud Resume: Eine serverlose Webseite mit AWS</h2>
+							<p>Mein Cloud-Resume-Projekt ist ein Beispiel für die praktische Anwendung moderner AWS-Technologien. Die Webseite wurde vollständig serverlos entwickelt und nutzt folgende AWS-Services:</p>
+							<ul>
+							  <li><strong>Amazon S3</strong>: Hosting der statischen Webseite.</li>
+							  <li><strong>CloudFront</strong>: Bereitstellung der Webseite über ein Content Delivery Network (CDN) mit HTTPS-Unterstützung.</li>
+							  <li><strong>Route 53</strong>: DNS-Verwaltung und Domain-Konfiguration.</li>
+							  <li><strong>API Gateway & Lambda</strong>: Implementierung eines dynamischen Besucherzählers, der die Zugriffe in einer DynamoDB-Tabelle speichert.</li>
+							  <li><strong>GitHub Actions</strong>: Automatisierte CI/CD-Pipeline für Tests und Deployment.</li>
+							</ul>
+							<p>Dieses Projekt hat mir gezeigt, wie man skalierbare und kosteneffiziente Cloud-Lösungen entwickelt.</p>
 
-										Dafür habe ich HTML und CSS verwendet, um das Resume als statische Webseite zu gestalten und mit Amazon S3 als statische Website zu hosten. Um HTTPS zu ermöglichen, habe ich CloudFront genutzt und mit Route 53 eine eigene Domain eingebunden.
+							<h2>View Counter: Dynamische Besucherzählung mit AWS</h2>
+							<p>Der View Counter ist ein zentrales Feature meiner Cloud-basierten Webseite, das die Anzahl der Besucher in Echtzeit erfasst und anzeigt. Die Implementierung umfasst folgende Schritte und Technologien:</p>
+							<ul>
+							  <li><strong>Frontend (JavaScript)</strong>: Der View Counter wurde mit JavaScript implementiert, das bei jedem Seitenaufruf eine API-Anfrage an AWS API Gateway sendet.</li>
+							  <li><strong>Backend (AWS Lambda)</strong>: Die API-Anfrage löst eine AWS Lambda-Funktion aus, die den Besucherzähler in einer DynamoDB-Tabelle speichert und aktualisiert.</li>
+							  <li><strong>Datenbank (DynamoDB)</strong>: Die Zugriffsdaten werden in einer DynamoDB-Tabelle gespeichert, die eine schnelle und skalierbare Datenspeicherung ermöglicht.</li>
+							  <li><strong>API Gateway</strong>: Die Kommunikation zwischen Frontend und Backend erfolgt über AWS API Gateway, das die Anfragen verarbeitet und an die Lambda-Funktion weiterleitet.</li>
+							</ul>
+							<p><strong>Herausforderungen & Lösungen:</strong> Eine der größten Herausforderungen war die Implementierung einer effizienten und sicheren Kommunikation zwischen Frontend und Backend. Durch die Nutzung von API Gateway und Lambda konnte ich eine robuste und skalierbare Lösung entwickeln, die auch bei hohen Zugriffszahlen zuverlässig funktioniert.</p>
+							<p><strong>Ergebnis:</strong> Der View Counter zeigt nicht nur die Anzahl der Besucher an, sondern demonstriert auch meine Fähigkeiten in der Integration von AWS-Services und der Entwicklung serverloser Architekturen.</p> 
 										
-										Ein Besucherzähler wurde mit JavaScript implementiert, wobei die Zugriffszahlen in DynamoDB gespeichert werden. Die Kommunikation zwischen Frontend und Datenbank erfolgt über eine API, die mit API Gateway und Lambda (Python, boto3) umgesetzt wurde.
-										
-										Die gesamte Infrastruktur wurde mit AWS SAM (Infrastructure as Code) definiert und über GitHub Actions (CI/CD) automatisiert bereitgestellt. Das Frontend-Repo sorgt für Updates des S3-Buckets, während das Backend-Repo Änderungen an der API testet und ausrollt.
-
-								<h2>View Counter</h2>
-									<p> Ich habe den View Counter mit JavaScript implementiert, der über eine API Gateway-Anfrage eine AWS Lambda-Funktion aufruft, die den Besucherzähler in einer DynamoDB-Tabelle speichert und aktualisiert. 
- 
-							   <h2>Finanz-Newsletter</h2>
-							   		<p> Ich habe eine automatisierte Finanz-News-Webseite entwickelt, die täglich große Marktveränderungen und anstehende Events aus verschiedenen Quellen aggregiert.
-										 Dazu nutze ich AWS Lambda für die Datenverarbeitung, Amazon DynamoDB zur Speicherung, sowie API Gateway für dynamische Abrufe. Die Daten stammen aus Finanz-APIs, 
-										 Web-Scraping und der Twitter API. Die Webseite wird mit React und AWS Amplify oder S3 + CloudFront gehostet. Zusätzlich sorgen EventBridge für automatisierte Updates und Amazon Comprehend für Sentiment-Analysen. Damit habe ich eine skalierbare und cloudbasierte Lösung geschaffen, die Finanzdaten effizient aufbereitet und visualisiert. 
-
+										<h2>Finanz-Newsletter: In Arbeit</h2>
+										<p>Derzeit arbeite ich an einem Projekt zur Entwicklung einer automatisierten Finanz-News-Webseite, die täglich Marktveränderungen und anstehende Events aus verschiedenen Quellen aggregiert. Geplante Technologien und Prozesse:</p>
+										<ul>
+										  <li><strong>AWS Lambda</strong>: Datenverarbeitung und Aggregation von Finanzdaten aus APIs und Web-Scraping.</li>
+										  <li><strong>Amazon DynamoDB</strong>: Speicherung der aggregierten Daten für die spätere Verarbeitung.</li>
+										  <li><strong>API Gateway</strong>: Bereitstellung der Daten für die Webseite.</li>
+										  <li><strong>AWS EventBridge</strong>: Automatisierung der täglichen Updates.</li>
+										  <li><strong>Amazon Comprehend</strong>: Sentiment-Analyse der Finanzdaten.</li>
+										</ul>
+										<p>Dieses Projekt wird mir die Möglichkeit bieten, komplexe Datenpipelines in der Cloud zu implementieren und zu automatisieren.</p>
 							
 							<p></p>
 						</div>
