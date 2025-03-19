@@ -1,0 +1,104 @@
+<!DOCTYPE HTML>
+<!--
+    Hyperspace by HTML5 UP
+    html5up.net | @ajlkn
+    Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+    <head>
+        <title>Feedback - Aleksander Bauer</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <link rel="stylesheet" href="assets/css/main.css" />
+        <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+    </head>
+    <body class="is-preload">
+
+        <!-- Header -->
+            <header id="header">
+                <a href="index.html" class="title">Aleksander Bauer</a>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="feedback.html" class="active">Feedback</a></li>
+                    </ul>
+                </nav>
+            </header>
+
+        <!-- Wrapper -->
+            <div id="wrapper">
+
+                <!-- Main -->
+                    <section id="main" class="wrapper">
+                        <div class="inner">
+                            <h1 class="major">Feedback-Formular</h1>
+                            <p>Bitte geben Sie Ihr Feedback zu meinen Fähigkeiten und Kenntnissen an:</p>
+                            <!-- Feedback-Formular -->
+                            <form id="feedback-form">
+                                <!-- Dropdown für Skills -->
+                                <h2>Bereich:</h2>
+                                <select id="skill-category" name="skill-category" required>
+                                    <option value="cloud">Cloud-Technologien (AWS, Azure, GCP)</option>
+                                    <option value="programming">Programmiersprachen (Python, JavaScript, etc.)</option>
+                                    <option value="containerization">Containerisierung (Docker, Kubernetes)</option>
+                                    <option value="ci-cd">CI/CD (GitHub Actions, Jenkins)</option>
+                                    <option value="databases">Datenbanken (PostgreSQL, MySQL)</option>
+                                    <option value="consulting">Cloud Consulting</option>
+                                </select>
+
+                                <!-- Textfeld für Kommentare -->
+                                <h2>Kommentar:</h2>
+                                <textarea id="comment" name="comment" placeholder="Ihr Feedback..." rows="5" required></textarea>
+
+                                <!-- Unternehmen -->
+                                <h2>Unternehmen:</h2>
+                                <input type="text" id="company" name="company" placeholder="Unternehmen (optional)" />
+
+                                <!-- Position -->
+                                <h2>Position:</h2>
+                                <select id="position" name="position">
+                                    <option value="">Bitte wählen...</option>
+                                    <option value="junior-cloud-engineer">Junior Cloud Engineer</option>
+                                    <option value="junior-devops-engineer">Junior DevOps Engineer</option>
+                                    <option value="junior-software-developer">Junior Software Developer</option>
+                                    <option value="junior-data-engineer">Junior Data Engineer</option>
+                                    <option value="junior-cloud-consultant">Junior Cloud Consultant</option>
+                                    <option value="other">Andere</option>
+                                </select>
+
+                                <!-- Absenden-Button -->
+                                <button type="submit" class="button primary">
+                                    Feedback senden
+                                </button>
+                            </form>
+
+                            <!-- Dynamische Section für Feedback-Bestätigung -->
+                            <section id="feedback-confirmation" style="display: none; margin-top: 2em;">
+                                <h2>Vielen Dank für Ihr Feedback!</h2>
+                                <p>Ihr Feedback wurde erfolgreich übermittelt. Wir schätzen Ihre Rückmeldung sehr.</p>
+                            </section>
+                        </div>
+                    </section>
+
+            </div>
+ <!--
+         Footer 
+            <footer id="footer" class="wrapper alt">
+                <div class="inner">
+                    <ul class="menu">
+                        <li>&copy; Aleksander Bauer. All rights reserved.</li>
+                    </ul>
+                </div>
+            </footer>
+        -->
+        <!-- Scripts -->
+            <script src="assets/js/jquery.min.js"></script>
+            <script src="assets/js/jquery.scrollex.min.js"></script>
+            <script src="assets/js/jquery.scrolly.min.js"></script>
+            <script src="assets/js/browser.min.js"></script>
+            <script src="assets/js/breakpoints.min.js"></script>
+            <script src="assets/js/util.js"></script>
+            <script src="assets/js/main.js"></script>
+
+    </body>
+</html>
