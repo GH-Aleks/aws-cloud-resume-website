@@ -1,6 +1,27 @@
+// Warte, bis die Seite vollständig geladen ist
 document.addEventListener("DOMContentLoaded", async function () {
     const counter = document.querySelector(".counter-number");
 
+    // Funktion zum Abrufen der IP-Adresse
+    async function fetchIPAddress() {
+        try {
+            // API Gateway URL
+            const response = await fetch("https://mtrw5y7h0i.execute-api.eu-north-1.amazonaws.com/get_ip");
+            if (!response.ok) {
+                throw new Error(`HTTP-Fehler! Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            const ipElement = document.getElementById("ip-address");
+            ipElement.innerText = `🌐 Deine IP-Adresse: ${data.ip}`;
+        } catch (error) {
+            console.error("Fehler beim Abrufen der IP-Adresse:", error);
+            const ipElement = document.getElementById("ip-address");
+            ipElement.innerText = "⚠️ Fehler beim Laden der IP-Adresse";
+        }
+    }
+
+    // Funktion zum Aktualisieren des Besucherzählers
     async function updateCounter() {
         try {
             let response = await fetch("https://f3vhz4bbpkchocxhe72st4dqvy0yjeee.lambda-url.eu-north-1.on.aws/");
@@ -8,11 +29,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 throw new Error(`HTTP-Fehler! Status: ${response.status}`);
             }
 
-            // Antwort überprüfen
             let data = await response.json();
-            console.log("API Antwort:", data); // Antwort überprüfen
-
-            // Da die Antwort direkt eine Zahl ist, können wir sie so verwenden:
             if (data !== undefined) {
                 counter.innerHTML = `👀 Views: ${data}`;
             } else {
@@ -25,5 +42,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
 
+    // Funktionen ausführen
+    fetchIPAddress();
     updateCounter();
 });
