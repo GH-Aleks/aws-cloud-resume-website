@@ -3910,7 +3910,7 @@ input, select, textarea {
 		}
 
 /* Floating IP Address Section */
-#your-ip.floating-ip {
+/* #your-ip.floating-ip {
     position: fixed;
     bottom: 20px;
     right: 20px;
@@ -3926,4 +3926,4 @@ input, select, textarea {
 #your-ip.floating-ip p {
     margin: 0;
     line-height: 1.5;
-}
+} */
