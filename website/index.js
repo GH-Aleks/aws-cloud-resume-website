@@ -54,6 +54,20 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
 
+    // Passwortschutz für den geschützten Bereich
+    document.getElementById("protected-link").addEventListener("click", function (event) {
+    event.preventDefault(); // Verhindert das direkte Weiterleiten
+
+    const password = prompt("Bitte geben Sie das Passwort ein:");
+    const correctPassword = "7777777"; // Setze hier dein gewünschtes Passwort
+
+    if (password === correctPassword) {
+        window.location.href = "privat.html"; // Weiterleitung zur geschützten Seite
+    } else {
+        alert("Falsches Passwort! Zugriff verweigert.");
+    }
+});
+
     // Funktionen ausführen
     fetchIPAddress();
     updateCounter();
