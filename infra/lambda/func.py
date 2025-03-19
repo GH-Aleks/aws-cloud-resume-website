@@ -7,9 +7,9 @@ app = Flask(__name__)
 # DynamoDB-Client mit expliziten Zugangsdaten
 dynamodb = boto3.resource(
     'dynamodb',
-    region_name='eu-north-1',  # Ersetze 'eu-north-1' durch deine Region
-    aws_access_key_id='***REMOVED***',  # Ersetze durch die Access Key ID des neuen Benutzers
-    aws_secret_access_key='***REMOVED***'  # Ersetze durch den Secret Access Key des neuen Benutzers
+    region_name='eu-north-1',
+    aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
+    aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY')
 )
 table = dynamodb.Table('FeedbackTable')  # Ersetze mit deinem Tabellennamen
 
