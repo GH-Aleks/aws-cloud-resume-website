@@ -99,6 +99,44 @@
             <script src="assets/js/breakpoints.min.js"></script>
             <script src="assets/js/util.js"></script>
             <script src="assets/js/main.js"></script>
+            <script>
+                document.getElementById("feedback-form").addEventListener("submit", async function (event) {
+                    event.preventDefault(); // Verhindert das Neuladen der Seite
+
+                    // Sammle die Formulardaten
+                    const skillCategory = document.getElementById("skill-category").value;
+                    const comment = document.getElementById("comment").value;
+                    const company = document.getElementById("company").value || "Anonym";
+                    const position = document.getElementById("position").value || "Unbekannt";
+
+                    // Sende die Daten an die Flask-API
+                    try {
+                        const response = await fetch("http://127.0.0.1:8080/feedback", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                skillCategory,
+                                comment,
+                                company,
+                                position,
+                            }),
+                        });
+
+                        if (response.ok) {
+                            // Zeige eine Bestätigung an
+                            document.getElementById("feedback-confirmation").style.display = "block";
+                            document.getElementById("feedback-form").reset();
+                        } else {
+                            throw new Error("Fehler beim Senden des Feedbacks.");
+                        }
+                    } catch (error) {
+                        console.error("Fehler:", error);
+                        alert("Es gab ein Problem beim Senden Ihres Feedbacks. Bitte versuchen Sie es später erneut.");
+                    }
+                });
+            </script>
 
     </body>
 </html>

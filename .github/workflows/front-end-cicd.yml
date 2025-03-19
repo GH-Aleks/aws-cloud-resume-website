@@ -1,35 +1,50 @@
-name: Upload Website to s3
+name: Upload Website to S3
 
 on:
   push:
     branches:
       - main
+      - test-workflow
+
+env:
+  AWS_REGION: 'eu-north-1'
+  SOURCE_DIR: 'website'
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       # 1. Check out the repository
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v3
 
-      # 2. Sync files to S3
+      # 2. Set environment variables based on branch
+      - name: Set Environment Variables
+        run: |
+          if [ "${{ github.ref_name }}" == "main" ]; then
+            echo "AWS_S3_BUCKET=cloud-resume-aleksander" >> $GITHUB_ENV
+            echo "CLOUDFRONT_DISTRIBUTION_ID=${{ secrets.CLOUDFRONT_DISTRIBUTION_ID_PROD }}" >> $GITHUB_ENV
+          else
+            echo "AWS_S3_BUCKET=test-cloud-resume-aleksander" >> $GITHUB_ENV
+            echo "CLOUDFRONT_DISTRIBUTION_ID=${{ secrets.CLOUDFRONT_DISTRIBUTION_ID_TEST }}" >> $GITHUB_ENV
+          fi
+
+      # 3. Sync files to S3
       - uses: jakejarvis/s3-sync-action@master
         with:
-          args: --acl private --follow-symlinks --delete
+          args: --acl public-read --follow-symlinks --delete
         env:
-          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          AWS_S3_BUCKET: ${{ env.AWS_S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: 'eu-north-1'
-          SOURCE_DIR: 'website'
+          AWS_REGION: ${{ env.AWS_REGION }}
 
-      # 3. CloudFront-Cache invalidieren
-#      - name: Invalidate CloudFront Cache
-#        uses: chetan/invalidate-cloudfront-action@v1.5
-#        with:
-#          distribution-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
-#          paths: '/*'
-#        env:
-#          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      # 4. Invalidate CloudFront Cache (temporarily disabled)
+      # - name: Invalidate CloudFront Cache
+      #   uses: chetan/invalidate-cloudfront-action@v1.5
+      #   with:
+      #     distribution-id: ${{ env.CLOUDFRONT_DISTRIBUTION_ID }}
+      #     paths: '/*'
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
