@@ -38,28 +38,27 @@
                         <li><strong>Route 53:</strong> DNS-Verwaltung und Domain-Konfiguration.</li>
                         <li><strong>GitHub Actions:</strong> Automatisierte CI/CD-Pipeline für Tests und Deployment.</li>
                     </ul>
-                    <p><strong>Ergebnis:</strong> Dieses Projekt zeigt meine Fähigkeit, effiziente und kosteneffektive Cloud-Lösungen zu entwickeln.</p>
 
-                    <!-- Projekt: Views -->
-                    <h2>Views Counter: Besucherzähler mit AWS</h2>
+                    <!-- Projekt: Besucherzähler mit AWS -->
+                    <h2>Besucherzähler mit AWS</h2>
                     <p>Dieses Projekt implementiert einen dynamischen Besucherzähler, der die Anzahl der Seitenaufrufe in Echtzeit anzeigt. Die Implementierung umfasst folgende Technologien und Schritte:</p>
                     <ul>
                         <li><strong>Frontend (JavaScript):</strong> Der Besucherzähler wird mit JavaScript dynamisch geladen und auf der Webseite angezeigt.</li>
                         <li><strong>Backend (AWS Lambda):</strong> Eine serverlose Lambda-Funktion verarbeitet die Anfragen und aktualisiert die Anzahl der Seitenaufrufe.</li>
-                        <li><strong>URL-basierte Funktionalität:</strong> Die Lambda-Funktion wird über eine spezielle URL aufgerufen, die direkt mit der Funktion verknüpft ist.</li>
-                        <li><strong>Datenbank (DynamoDB):</strong> Die Anzahl der Seitenaufrufe wird in einer DynamoDB-Tabelle gespeichert und bei jedem Aufruf aktualisiert.</li>
+                        <li><strong>AWS Lambda Function URLs:</strong> Die Lambda-Funktion wird über eine spezielle URL aufgerufen, die direkt mit der Funktion verknüpft ist.</li>
+                        <li><strong>DynamoDB:</strong> Die Anzahl der Seitenaufrufe wird in einer DynamoDB-Tabelle gespeichert und bei jedem Aufruf aktualisiert.</li>
                     </ul>
-                    <p><strong>Herausforderungen & Lösungen:</strong> Eine der Herausforderungen war die effiziente Speicherung und Aktualisierung der Seitenaufrufe in DynamoDB. Durch die Nutzung von serverlosen Technologien konnte eine zuverlässige und kosteneffektive Lösung entwickelt werden.</p>
 
-                    <!-- Projekt: IP-Adresse -->
+                    <!-- Projekt: IP-Adresse: Anzeige der Besucher-IP mit AWS API Gateway -->
                     <h2>IP-Adresse: Anzeige der Besucher-IP mit AWS API Gateway</h2>
-                    <p>Dieses Projekt erweitert die Webseite um die Funktion, die IP-Adresse des Besuchers in Echtzeit anzuzeigen. Die Implementierung umfasst folgende Technologien und Schritte:</p>
+                    <p>Dieses Projekt zeigt die IP-Adresse der Besucher an, ohne sie zu speichern. Die Implementierung umfasst:</p>
                     <ul>
-                        <li><strong>Frontend (JavaScript):</strong> Die IP-Adresse wird mit JavaScript dynamisch geladen und auf der Webseite angezeigt.</li>
-                        <li><strong>Backend (AWS Lambda):</strong> Eine serverlose Lambda-Funktion verarbeitet die Anfragen und liefert die IP-Adresse des Besuchers.</li>
-                        <li><strong>API Gateway:</strong> Die Kommunikation zwischen Frontend und Backend erfolgt über AWS API Gateway, das die Anfragen an die Lambda-Funktion weiterleitet.</li>
+                        <li><strong>AWS Lambda:</strong> Die Funktion verarbeitet eingehende Anfragen und extrahiert die IP-Adresse des Besuchers.</li>
+                        <li><strong>API Gateway:</strong> Bereitstellung eines Endpunkts für die IP-Anzeige.</li>
+                        <li><strong>Keine Speicherung der IP:</strong> Die IP-Adresse wird lediglich angezeigt, aber nicht gespeichert.</li>
+                        <li><strong>IAM:</strong> Zugriffskontrollen für sichere Datenverarbeitung.</li>
                     </ul>
-                    <p><strong>Herausforderungen & Lösungen:</strong> Eine der größten Herausforderungen war die sichere und effiziente Kommunikation zwischen Frontend und Backend. Durch die Nutzung von API Gateway konnte eine robuste und effektive Lösung entwickelt werden.</p>
+                    <p>Die IP-Adresse wird bei jedem Seitenaufruf angezeigt, ohne dass sie in einer Datenbank gespeichert wird.</p>
                 </div>
             </section>
 
