@@ -3,13 +3,13 @@ name: Upload Website to S3
 on:
   push:
     branches:
-      - main
       - test-workflow
   workflow_dispatch:
 
 env:
   AWS_REGION: 'eu-north-1'
   SOURCE_DIR: 'website'
+  AWS_S3_BUCKET: 'test-cloud-resume-aleksander' # Statisch auf den Test-Bucket gesetzt
 
 jobs:
   deploy:
@@ -18,15 +18,10 @@ jobs:
       # 1. Check out the repository
       - uses: actions/checkout@v3
 
-      # 2. Set environment variables based on branch
-        run: |
-          if [ "${{ github.ref_name }}" == "main" ]; then
-            echo "AWS_S3_BUCKET=cloud-resume-aleksander" >> $GITHUB_ENV
-            echo "CLOUDFRONT_DISTRIBUTION_ID=${{ secrets.CLOUDFRONT_DISTRIBUTION_ID_PROD }}" >> $GITHUB_ENV
-          else
-            echo "AWS_S3_BUCKET=test-cloud-resume-aleksander" >> $GITHUB_ENV
-            echo "CLOUDFRONT_DISTRIBUTION_ID=${{ secrets.CLOUDFRONT_DISTRIBUTION_ID_TEST }}" >> $GITHUB_ENV
-          fi
+      # 2. Debugging: Check environment variables and files
+      - run: echo "AWS_S3_BUCKET=$AWS_S3_BUCKET"
+      - run: echo "SOURCE_DIR=$SOURCE_DIR"
+      - run: ls $SOURCE_DIR
 
       # 3. Sync files to S3
       - uses: jakejarvis/s3-sync-action@master
@@ -37,14 +32,4 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ env.AWS_REGION }}
-
-      # 4. Invalidate CloudFront Cache (temporarily disabled)
-      # - name: Invalidate CloudFront Cache
-      #   uses: chetan/invalidate-cloudfront-action@v1.5
-      #   with:
-      #     distribution-id: ${{ env.CLOUDFRONT_DISTRIBUTION_ID }}
-      #     paths: '/*'
-      #   env:
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
