@@ -4,7 +4,6 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-<<<<<<< HEAD
 # DynamoDB-Client mit expliziten Zugangsdaten
 dynamodb = boto3.resource(
     'dynamodb',
@@ -12,10 +11,6 @@ dynamodb = boto3.resource(
     aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
     aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY')
 )
-=======
-# DynamoDB-Client
-dynamodb = boto3.resource('dynamodb')
->>>>>>> 922a233391b2b092d33f646f116260bc9b271d2e
 table = dynamodb.Table('FeedbackTable')  # Ersetze mit deinem Tabellennamen
 
 @app.route('/feedback', methods=['POST'])

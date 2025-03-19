@@ -4,25 +4,21 @@ on:
   push:
     branches:
       - main
-<<<<<<< HEAD
       - test-workflow
+  workflow_dispatch:
 
 env:
   AWS_REGION: 'eu-north-1'
   SOURCE_DIR: 'website'
-=======
->>>>>>> 922a233391b2b092d33f646f116260bc9b271d2e
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       # 1. Check out the repository
-<<<<<<< HEAD
       - uses: actions/checkout@v3
 
       # 2. Set environment variables based on branch
-      - name: Set Environment Variables
         run: |
           if [ "${{ github.ref_name }}" == "main" ]; then
             echo "AWS_S3_BUCKET=cloud-resume-aleksander" >> $GITHUB_ENV
@@ -51,28 +47,4 @@ jobs:
       #   env:
       #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-=======
-      - uses: actions/checkout@master
-
-      # 2. Sync files to S3
-      - uses: jakejarvis/s3-sync-action@master
-        with:
-          args: --acl private --follow-symlinks --delete
-        env:
-          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: 'eu-north-1'
-          SOURCE_DIR: 'website'
-
-      # 3. CloudFront-Cache invalidieren
-#      - name: Invalidate CloudFront Cache
-#        uses: chetan/invalidate-cloudfront-action@v1.5
-#        with:
-#          distribution-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
-#          paths: '/*'
-#        env:
-#          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
->>>>>>> 922a233391b2b092d33f646f116260bc9b271d2e
 
