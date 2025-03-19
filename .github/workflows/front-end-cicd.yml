@@ -25,7 +25,7 @@ jobs:
 
       # 3. CloudFront-Cache invalidieren
       - name: Invalidate CloudFront Cache
-        uses: chetan/invalidate-cloudfront-action@v1.6
+        uses: chetan/invalidate-cloudfront-action@v1.5
         with:
           distribution-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
           paths: '/*'
