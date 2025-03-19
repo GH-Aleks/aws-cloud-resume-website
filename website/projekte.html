@@ -1,90 +1,87 @@
 <!DOCTYPE HTML>
 <html>
-	<head>
-		<title>Lebenslauf</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-	</head>
-	<body class="is-preload">
+    <head>
+        <title>Projekte</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <link rel="stylesheet" href="assets/css/main.css" />
+        <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+    </head>
+    <body class="is-preload">
 
-		<!-- Header -->
-			<header id="header">
-				<a href="index.html" class="title">Aleksander Bauer</a>
-				<nav>
-					<ul>
-						<li><a href="index.html">Home</a></li>
-						<li><a href="lebenslauf.html" class="active">Lebenslauf</a></li>
+        <!-- Header -->
+        <header id="header">
+            <a href="index.html" class="title">Aleksander Bauer</a>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="lebenslauf.html">Lebenslauf</a></li>
+                    <li><a href="projekte.html" class="active">Projekte</a></li>
+                </ul>
+            </nav>
+        </header>
 
-					</ul>
-				</nav>
-			</header>
+        <!-- Wrapper -->
+        <div id="wrapper">
 
-		<!-- Wrapper -->
-			<div id="wrapper">
+            <!-- Main -->
+            <section id="main" class="wrapper">
+                <div class="inner">
+                    <h1 class="major">Meine Cloud-Projekte: Praktische Erfahrungen mit AWS</h1>
 
-				<!-- Main -->
-					<section id="main" class="wrapper">
-						<div class="inner">
-							<h1 class="major">Meine Cloud-Projekte: Praktische Erfahrungen mit AWS</h1>
+                    <!-- Projekt: Cloud Resume -->
+                    <h2>Cloud Resume: Eine serverlose Webseite mit AWS</h2>
+                    <p>Mein Cloud-Resume-Projekt ist ein Beispiel für die praktische Anwendung moderner AWS-Technologien. Die Webseite wurde vollständig serverlos entwickelt und nutzt folgende AWS-Services:</p>
+                    <ul>
+                        <li><strong>Amazon S3:</strong> Hosting der statischen Webseite.</li>
+                        <li><strong>CloudFront:</strong> Bereitstellung der Webseite über ein Content Delivery Network (CDN) mit HTTPS-Unterstützung.</li>
+                        <li><strong>Route 53:</strong> DNS-Verwaltung und Domain-Konfiguration.</li>
+                        <li><strong>GitHub Actions:</strong> Automatisierte CI/CD-Pipeline für Tests und Deployment.</li>
+                    </ul>
+                    <p><strong>Ergebnis:</strong> Dieses Projekt zeigt meine Fähigkeit, effiziente und kosteneffektive Cloud-Lösungen zu entwickeln.</p>
 
-							<h2>Cloud Resume: Eine serverlose Webseite mit AWS</h2>
-							<p>Mein Cloud-Resume-Projekt ist ein Beispiel für die praktische Anwendung moderner AWS-Technologien. Die Webseite wurde vollständig serverlos entwickelt und nutzt folgende AWS-Services:</p>
-							<ul>
-							  <li><strong>Amazon S3</strong>: Hosting der statischen Webseite.</li>
-							  <li><strong>CloudFront</strong>: Bereitstellung der Webseite über ein Content Delivery Network (CDN) mit HTTPS-Unterstützung.</li>
-							  <li><strong>Route 53</strong>: DNS-Verwaltung und Domain-Konfiguration.</li>
-							  <li><strong>API Gateway & Lambda</strong>: Implementierung eines dynamischen Besucherzählers, der die Zugriffe in einer DynamoDB-Tabelle speichert.</li>
-							  <li><strong>GitHub Actions</strong>: Automatisierte CI/CD-Pipeline für Tests und Deployment.</li>
-							</ul>
-							<p>Dieses Projekt hat mir gezeigt, wie man skalierbare und kosteneffiziente Cloud-Lösungen entwickelt.</p>
+                    <!-- Projekt: Views -->
+                    <h2>Views Counter: Besucherzähler mit AWS</h2>
+                    <p>Dieses Projekt implementiert einen dynamischen Besucherzähler, der die Anzahl der Seitenaufrufe in Echtzeit anzeigt. Die Implementierung umfasst folgende Technologien und Schritte:</p>
+                    <ul>
+                        <li><strong>Frontend (JavaScript):</strong> Der Besucherzähler wird mit JavaScript dynamisch geladen und auf der Webseite angezeigt.</li>
+                        <li><strong>Backend (AWS Lambda):</strong> Eine serverlose Lambda-Funktion verarbeitet die Anfragen und aktualisiert die Anzahl der Seitenaufrufe.</li>
+                        <li><strong>URL-basierte Funktionalität:</strong> Die Lambda-Funktion wird über eine spezielle URL aufgerufen, die direkt mit der Funktion verknüpft ist.</li>
+                        <li><strong>Datenbank (DynamoDB):</strong> Die Anzahl der Seitenaufrufe wird in einer DynamoDB-Tabelle gespeichert und bei jedem Aufruf aktualisiert.</li>
+                    </ul>
+                    <p><strong>Herausforderungen & Lösungen:</strong> Eine der Herausforderungen war die effiziente Speicherung und Aktualisierung der Seitenaufrufe in DynamoDB. Durch die Nutzung von serverlosen Technologien konnte eine zuverlässige und kosteneffektive Lösung entwickelt werden.</p>
 
-							<h2>View Counter: Dynamische Besucherzählung mit AWS</h2>
-							<p>Der View Counter ist ein zentrales Feature meiner Cloud-basierten Webseite, das die Anzahl der Besucher in Echtzeit erfasst und anzeigt. Die Implementierung umfasst folgende Schritte und Technologien:</p>
-							<ul>
-							  <li><strong>Frontend (JavaScript)</strong>: Der View Counter wurde mit JavaScript implementiert, das bei jedem Seitenaufruf eine API-Anfrage an AWS API Gateway sendet.</li>
-							  <li><strong>Backend (AWS Lambda)</strong>: Die API-Anfrage löst eine AWS Lambda-Funktion aus, die den Besucherzähler in einer DynamoDB-Tabelle speichert und aktualisiert.</li>
-							  <li><strong>Datenbank (DynamoDB)</strong>: Die Zugriffsdaten werden in einer DynamoDB-Tabelle gespeichert, die eine schnelle und skalierbare Datenspeicherung ermöglicht.</li>
-							  <li><strong>API Gateway</strong>: Die Kommunikation zwischen Frontend und Backend erfolgt über AWS API Gateway, das die Anfragen verarbeitet und an die Lambda-Funktion weiterleitet.</li>
-							</ul>
-							<p><strong>Herausforderungen & Lösungen:</strong> Eine der größten Herausforderungen war die Implementierung einer effizienten und sicheren Kommunikation zwischen Frontend und Backend. Durch die Nutzung von API Gateway und Lambda konnte ich eine robuste und skalierbare Lösung entwickeln, die auch bei hohen Zugriffszahlen zuverlässig funktioniert.</p>
-							<p><strong>Ergebnis:</strong> Der View Counter zeigt nicht nur die Anzahl der Besucher an, sondern demonstriert auch meine Fähigkeiten in der Integration von AWS-Services und der Entwicklung serverloser Architekturen.</p> 
-										
-										<h2>Finanz-Newsletter: In Arbeit</h2>
-										<p>Derzeit arbeite ich an einem Projekt zur Entwicklung einer automatisierten Finanz-News-Webseite, die täglich Marktveränderungen und anstehende Events aus verschiedenen Quellen aggregiert. Geplante Technologien und Prozesse:</p>
-										<ul>
-										  <li><strong>AWS Lambda</strong>: Datenverarbeitung und Aggregation von Finanzdaten aus APIs und Web-Scraping.</li>
-										  <li><strong>Amazon DynamoDB</strong>: Speicherung der aggregierten Daten für die spätere Verarbeitung.</li>
-										  <li><strong>API Gateway</strong>: Bereitstellung der Daten für die Webseite.</li>
-										  <li><strong>AWS EventBridge</strong>: Automatisierung der täglichen Updates.</li>
-										  <li><strong>Amazon Comprehend</strong>: Sentiment-Analyse der Finanzdaten.</li>
-										</ul>
-										<p>Dieses Projekt wird mir die Möglichkeit bieten, komplexe Datenpipelines in der Cloud zu implementieren und zu automatisieren.</p>
-							
-							<p></p>
-						</div>
-					</section>
+                    <!-- Projekt: IP-Adresse -->
+                    <h2>IP-Adresse: Anzeige der Besucher-IP mit AWS API Gateway</h2>
+                    <p>Dieses Projekt erweitert die Webseite um die Funktion, die IP-Adresse des Besuchers in Echtzeit anzuzeigen. Die Implementierung umfasst folgende Technologien und Schritte:</p>
+                    <ul>
+                        <li><strong>Frontend (JavaScript):</strong> Die IP-Adresse wird mit JavaScript dynamisch geladen und auf der Webseite angezeigt.</li>
+                        <li><strong>Backend (AWS Lambda):</strong> Eine serverlose Lambda-Funktion verarbeitet die Anfragen und liefert die IP-Adresse des Besuchers.</li>
+                        <li><strong>API Gateway:</strong> Die Kommunikation zwischen Frontend und Backend erfolgt über AWS API Gateway, das die Anfragen an die Lambda-Funktion weiterleitet.</li>
+                    </ul>
+                    <p><strong>Herausforderungen & Lösungen:</strong> Eine der größten Herausforderungen war die sichere und effiziente Kommunikation zwischen Frontend und Backend. Durch die Nutzung von API Gateway konnte eine robuste und effektive Lösung entwickelt werden.</p>
+                </div>
+            </section>
 
-			</div>
+        </div>
 
-		<!-- Footer -->
-			<footer id="footer" class="wrapper alt">
-				<div class="inner">
-					<ul class="menu">
-						
-					</ul>
-				</div>
-			</footer>
+        <!-- Footer -->
+        <footer id="footer" class="wrapper alt">
+            <div class="inner">
+                <ul class="menu">
+                    <li>&copy; Aleksander Bauer. All rights reserved.</li>
+                </ul>
+            </div>
+        </footer>
 
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrollex.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
+        <!-- Scripts -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/jquery.scrollex.min.js"></script>
+        <script src="assets/js/jquery.scrolly.min.js"></script>
+        <script src="assets/js/browser.min.js"></script>
+        <script src="assets/js/breakpoints.min.js"></script>
+        <script src="assets/js/util.js"></script>
+        <script src="assets/js/main.js"></script>
 
-	</body>
+    </body>
 </html>
