@@ -12,12 +12,24 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
 
             const data = await response.json();
-            const ipElement = document.getElementById("ip-address");
-            ipElement.innerText = `🌐 Deine IP-Adresse: ${data.ip}`;
+
+            // Aktualisiere die Anzeige im Sidebar-Menü
+            const ipElementSidebar = document.getElementById("ip-address-sidebar");
+            ipElementSidebar.innerText = `${data.ip}`;
+
+            // Aktualisiere die Anzeige im Abschnitt "Four"
+            const ipElementMain = document.getElementById("ip-address-main");
+            ipElementMain.innerText = `🌐 Deine IP-Adresse: ${data.ip}`;
         } catch (error) {
             console.error("Fehler beim Abrufen der IP-Adresse:", error);
-            const ipElement = document.getElementById("ip-address");
-            ipElement.innerText = "⚠️ Fehler beim Laden der IP-Adresse";
+
+            // Fehleranzeige im Sidebar-Menü
+            const ipElementSidebar = document.getElementById("ip-address-sidebar");
+            ipElementSidebar.innerText = "⚠️ Fehler beim Laden der IP-Adresse";
+
+            // Fehleranzeige im Abschnitt "Four"
+            const ipElementMain = document.getElementById("ip-address-main");
+            ipElementMain.innerText = "⚠️ Fehler beim Laden der IP-Adresse";
         }
     }
 
