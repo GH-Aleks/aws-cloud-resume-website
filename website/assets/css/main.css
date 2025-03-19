@@ -3907,3 +3907,22 @@ input, select, textarea {
 			}
 
 		}
+
+/* Floating IP Address Section */
+#your-ip.floating-ip {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    z-index: 1000;
+}
+
+#your-ip.floating-ip p {
+    margin: 0;
+    line-height: 1.5;
+}
