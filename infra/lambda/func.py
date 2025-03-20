@@ -51,9 +51,10 @@ def lambda_handler(event, context):
     # CORS-Header für alle Antworten
     headers = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Allow-Methods': 'OPTIONS,POST'
+        'Access-Control-Allow-Origin': 'https://test.aleksanderbauer.de',  # Ändere dies zu deiner Domain
+        'Access-Control-Allow-Headers': 'Content-Type,Accept',  # Füge Accept hinzu
+        'Access-Control-Allow-Methods': 'OPTIONS,POST',
+        'Access-Control-Max-Age': '86400'  # Cache CORS response für 24 Stunden
     }
     
     # Log für Debugging
