@@ -33,6 +33,9 @@ override.tf.json
 .terraformrc
 terraform.rc
 
+# secrets.txt
+secrets.txt
+.env
 #Ignore for Version Control System (git)
 __pycache__/
 *.pyc
