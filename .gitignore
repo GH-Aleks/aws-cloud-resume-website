@@ -36,6 +36,9 @@ terraform.rc
 # secrets.txt
 secrets.txt
 .env
+
+echo "infra/lambda/python/" >> .gitignore
+echo "infra/lambda/*.zip" >> .gitignore
 #Ignore for Version Control System (git)
 __pycache__/
 *.pyc
