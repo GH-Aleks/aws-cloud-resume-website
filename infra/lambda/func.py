@@ -40,10 +40,58 @@ def save_feedback():
 
 # Lambda-Handler (wird von AWS Lambda aufgerufen)
 def lambda_handler(event, context):
-    # Später zu implementieren für die AWS Lambda-Funktion
+    """AWS Lambda Function Handler zur Verarbeitung von API Gateway Anfragen"""
+    # HTTP-Methode und Body aus dem Event extrahieren
+    method = event.get('httpMethod', 'GET')
+    path = event.get('path', '/')
+    body = event.get('body', '{}')
+    
+    # Wenn es eine POST-Anfrage an den Feedback-Endpunkt ist
+    if method == 'POST' and path.endswith('/feedback'):
+        try:
+            import json
+            data = json.loads(body)
+            # Feedback-Logik aus deiner save_feedback-Funktion
+            skill_category = data.get('skillCategory')
+            comment = data.get('comment')
+            company = data.get('company', 'Anonym')
+            position = data.get('position', 'Unbekannt')
+            
+            table.put_item(Item={
+                'id': str(datetime.utcnow()),
+                'skillCategory': skill_category,
+                'comment': comment,
+                'company': company,
+                'position': position,
+                'createdAt': datetime.utcnow().isoformat()
+            })
+            
+            return {
+                'statusCode': 200,
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'  # CORS-Unterstützung
+                },
+                'body': json.dumps({'message': 'Feedback erfolgreich gespeichert!'})
+            }
+        except Exception as e:
+            return {
+                'statusCode': 500,
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                'body': json.dumps({'message': f'Fehler: {str(e)}'})
+            }
+    
+    # Standard-Antwort
     return {
-        "statusCode": 200,
-        "body": "Hello from Lambda"
+        'statusCode': 200,
+        'headers': {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+        },
+        'body': json.dumps({'message': 'Hello from Feedback API'})
     }
 
 # Lokaler Entwicklungsserver
