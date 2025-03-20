@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import boto3
 from datetime import datetime
+import os  # Fehlender Import hinzugefügt
 
 app = Flask(__name__)
 
