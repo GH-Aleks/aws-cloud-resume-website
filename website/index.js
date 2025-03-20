@@ -68,7 +68,58 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 });
 
-    // Funktionen ausführen
-    fetchIPAddress();
-    updateCounter();
+    // Cookie Consent Management
+    function manageCookieConsent() {
+        const cookieBanner = document.getElementById('cookie-banner');
+        const acceptButton = document.getElementById('accept-cookies');
+        const declineButton = document.getElementById('decline-cookies');
+        
+        // Prüfe, ob Consent bereits gegeben wurde
+        const hasConsent = localStorage.getItem('cookieConsent') === 'true';
+        
+        if (!hasConsent) {
+            cookieBanner.style.display = 'flex';
+        }
+        
+        // Event-Listener für "Akzeptieren"
+        acceptButton.addEventListener('click', () => {
+            localStorage.setItem('cookieConsent', 'true');
+            cookieBanner.style.display = 'none';
+            
+            // IP-Adresse und Besucherzähler erst nach Zustimmung laden
+            fetchIPAddress();
+            updateCounter();
+        });
+        
+        // Event-Listener für "Ablehnen"
+        declineButton.addEventListener('click', () => {
+            localStorage.setItem('cookieConsent', 'false');
+            cookieBanner.style.display = 'none';
+            
+            // IP-Adresse und Besucherzähler ausblenden
+            const ipElements = document.querySelectorAll("[id^='ip-address']");
+            ipElements.forEach(el => {
+                el.innerText = "IP-Anzeige deaktiviert";
+            });
+            
+            const counter = document.querySelector(".counter-number");
+            if (counter) counter.innerText = "Zähler deaktiviert";
+        });
+        
+        return hasConsent;
+    }
+
+    // Cookie-Consent prüfen und ggf. IP/Counter laden
+    const hasConsent = manageCookieConsent();
+    if (hasConsent) {
+        // Wenn Zustimmung bereits vorhanden, Funktionen ausführen
+        fetchIPAddress();
+        updateCounter();
+    } else {
+        // Funktionsaufrufe aus dem ursprünglichen Code entfernen
+        // (werden jetzt durch das Cookie-Management gesteuert)
+        // ENTFERNE oder kommentiere diese Zeilen aus:
+        // fetchIPAddress();
+        // updateCounter();
+    }
 });
