@@ -37,5 +37,11 @@ def save_feedback():
         print(f"Fehler: {e}")
         return jsonify({'message': 'Fehler beim Speichern des Feedbacks.'}), 500
 
+def lambda_handler(event, context):
+    return {
+        "statusCode": 200,
+        "body": "Hello from Lambda!"
+    }
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
