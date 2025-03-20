@@ -39,60 +39,73 @@ def save_feedback():
 
 
 # Lambda-Handler (wird von AWS Lambda aufgerufen)
+import json
+import boto3
+from datetime import datetime
+
+# DynamoDB-Client für Lambda
+dynamodb = boto3.resource('dynamodb', region_name='eu-north-1')
+table = dynamodb.Table('FeedbackTable')
+
 def lambda_handler(event, context):
-    """AWS Lambda Function Handler zur Verarbeitung von API Gateway Anfragen"""
-    # HTTP-Methode und Body aus dem Event extrahieren
-    method = event.get('httpMethod', 'GET')
-    path = event.get('path', '/')
-    body = event.get('body', '{}')
-    
-    # Wenn es eine POST-Anfrage an den Feedback-Endpunkt ist
-    if method == 'POST' and path.endswith('/feedback'):
-        try:
-            import json
-            data = json.loads(body)
-            # Feedback-Logik aus deiner save_feedback-Funktion
-            skill_category = data.get('skillCategory')
-            comment = data.get('comment')
-            company = data.get('company', 'Anonym')
-            position = data.get('position', 'Unbekannt')
-            
-            table.put_item(Item={
-                'id': str(datetime.utcnow()),
-                'skillCategory': skill_category,
-                'comment': comment,
-                'company': company,
-                'position': position,
-                'createdAt': datetime.utcnow().isoformat()
-            })
-            
-            return {
-                'statusCode': 200,
-                'headers': {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'  # CORS-Unterstützung
-                },
-                'body': json.dumps({'message': 'Feedback erfolgreich gespeichert!'})
-            }
-        except Exception as e:
-            return {
-                'statusCode': 500,
-                'headers': {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                },
-                'body': json.dumps({'message': f'Fehler: {str(e)}'})
-            }
-    
-    # Standard-Antwort
-    return {
-        'statusCode': 200,
-        'headers': {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-        },
-        'body': json.dumps({'message': 'Hello from Feedback API'})
+    # CORS-Header für alle Antworten
+    headers = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Methods': 'OPTIONS,POST'
     }
+    
+    # Log für Debugging
+    print(f"Event erhalten: {json.dumps(event)}")
+    
+    # OPTIONS-Anfragen für CORS
+    http_method = event.get('requestContext', {}).get('http', {}).get('method')
+    if http_method == 'OPTIONS':
+        return {
+            'statusCode': 200,
+            'headers': headers,
+            'body': json.dumps({'message': 'CORS enabled'})
+        }
+    
+    try:
+        # Body parsen
+        if 'body' in event:
+            body = event['body']
+            if isinstance(body, str):
+                body = json.loads(body)
+        else:
+            # Fallback
+            body = event
+        
+        # Daten extrahieren
+        skill_category = body.get('skillCategory')
+        comment = body.get('comment')
+        company = body.get('company', 'Anonym')
+        position = body.get('position', 'Unbekannt')
+        
+        # In DynamoDB speichern
+        table.put_item(Item={
+            'id': str(datetime.utcnow().timestamp()),  # Bessere ID
+            'skillCategory': skill_category,
+            'comment': comment,
+            'company': company,
+            'position': position,
+            'createdAt': datetime.utcnow().isoformat()
+        })
+        
+        return {
+            'statusCode': 200,
+            'headers': headers,
+            'body': json.dumps({'message': 'Feedback erfolgreich gespeichert!'})
+        }
+    except Exception as e:
+        print(f"Fehler: {str(e)}")
+        return {
+            'statusCode': 500,
+            'headers': headers,
+            'body': json.dumps({'message': f'Fehler beim Speichern des Feedbacks: {str(e)}'})
+        }
 
 # Lokaler Entwicklungsserver
 if __name__ == "__main__":
