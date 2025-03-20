@@ -37,11 +37,15 @@ def save_feedback():
         print(f"Fehler: {e}")
         return jsonify({'message': 'Fehler beim Speichern des Feedbacks.'}), 500
 
+
+# Lambda-Handler (wird von AWS Lambda aufgerufen)
 def lambda_handler(event, context):
+    # Später zu implementieren für die AWS Lambda-Funktion
     return {
         "statusCode": 200,
-        "body": "Hello from Lambda!"
+        "body": "Hello from Lambda"
     }
 
+# Lokaler Entwicklungsserver
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
