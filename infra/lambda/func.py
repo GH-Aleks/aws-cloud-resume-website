@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify
 import boto3
 from datetime import datetime
-import os  # Fehlender Import hinzugefügt
+import os
+import awslambdaric
 
 app = Flask(__name__)
 
@@ -12,19 +13,17 @@ dynamodb = boto3.resource(
     aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
     aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY')
 )
-table = dynamodb.Table('FeedbackTable')  # Ersetze mit deinem Tabellennamen
+table = dynamodb.Table('FeedbackTable')
 
 @app.route('/feedback', methods=['POST'])
 def save_feedback():
     try:
-        # Feedback-Daten aus der Anfrage extrahieren
         data = request.json
         skill_category = data['skillCategory']
         comment = data['comment']
         company = data.get('company', 'Anonym')
         position = data.get('position', 'Unbekannt')
 
-        # Feedback in DynamoDB speichern
         table.put_item(Item={
             'id': str(datetime.utcnow()),
             'skillCategory': skill_category,
@@ -39,5 +38,6 @@ def save_feedback():
         print(f"Fehler: {e}")
         return jsonify({'message': 'Fehler beim Speichern des Feedbacks.'}), 500
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
+# Lambda-Handler
+from aws_lambda_wsgi import make_lambda_handler
+handler = make_lambda_handler(app)
