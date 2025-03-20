@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify
 import boto3
 from datetime import datetime
 import os
-import awslambdaric
 
 app = Flask(__name__)
 
@@ -38,6 +37,5 @@ def save_feedback():
         print(f"Fehler: {e}")
         return jsonify({'message': 'Fehler beim Speichern des Feedbacks.'}), 500
 
-# Lambda-Handler
-from aws_lambda_wsgi import make_lambda_handler
-handler = make_lambda_handler(app)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8080)
