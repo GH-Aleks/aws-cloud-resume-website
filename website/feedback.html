@@ -6,7 +6,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
         <link rel="stylesheet" href="assets/css/main.css" />
-        <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>        git pull origin test-workflow
+        <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
     </head>
     <body class="is-preload">
 
@@ -29,6 +29,7 @@
                         <div class="inner">
                             <h1 class="major">Feedback-Formular</h1>
                             <p>Bitte geben Sie Ihr Feedback zu meinen Fähigkeiten und Kenntnissen an:</p>
+                            
                             <!-- Feedback-Formular -->
                             <form id="feedback-form">
                                 <!-- Dropdown für Skills -->
@@ -73,20 +74,20 @@
                                 <h2>Vielen Dank für Ihr Feedback!</h2>
                                 <p>Ihr Feedback wurde erfolgreich übermittelt. Wir schätzen Ihre Rückmeldung sehr.</p>
                             </section>
+                            
+                            <!-- Cookie Consent Banner -->
+                            <div id="cookie-banner" class="cookie-banner" style="display: none;">
+                                <p>Diese Website zeigt Ihre IP-Adresse an und zählt Besucher. Keine Daten werden gespeichert.</p>
+                                <div class="cookie-buttons">
+                                    <button id="accept-cookies" class="button primary small">OK</button>
+                                    <button id="decline-cookies" class="button small">Nein</button>
+                                </div>
+                            </div>
                         </div>
                     </section>
 
             </div>
- <!--
-         Footer 
-            <footer id="footer" class="wrapper alt">
-                <div class="inner">
-                    <ul class="menu">
-                        <li>&copy; Aleksander Bauer. All rights reserved.</li>
-                    </ul>
-                </div>
-            </footer>
-        -->
+
         <!-- Scripts -->
             <script src="assets/js/jquery.min.js"></script>
             <script src="assets/js/jquery.scrollex.min.js"></script>
@@ -95,6 +96,11 @@
             <script src="assets/js/breakpoints.min.js"></script>
             <script src="assets/js/util.js"></script>
             <script src="assets/js/main.js"></script>
+            
+            <!-- Cookie Management Script -->
+            <script src="./index.js"></script>
+            
+            <!-- Feedback Form Script -->
             <script>
                 document.getElementById("feedback-form").addEventListener("submit", async function (event) {
                     event.preventDefault(); // Verhindert das Neuladen der Seite
@@ -105,7 +111,7 @@
                     const company = document.getElementById("company").value || "Anonym";
                     const position = document.getElementById("position").value || "Unbekannt";
 
-                    // Sende die Daten an die Flask-API
+                    // Sende die Daten an die Lambda-API
                     try {
                         const response = await fetch("https://ixbxrstvc2k5jd34twep3p7zxm0adteg.lambda-url.eu-north-1.on.aws/", {
                             method: "POST",

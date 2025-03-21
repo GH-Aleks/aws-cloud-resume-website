@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import boto3
 from datetime import datetime
 import os
+import json
 
 app = Flask(__name__)
 
@@ -39,20 +40,16 @@ def save_feedback():
 
 
 # Lambda-Handler (wird von AWS Lambda aufgerufen)
-import json
-import boto3
-from datetime import datetime
-
 # DynamoDB-Client für Lambda
 dynamodb = boto3.resource('dynamodb', region_name='eu-north-1')
 table = dynamodb.Table('FeedbackTable')
 
 def lambda_handler(event, context):
     # CORS-Header für alle Antworten
+    # Entferne den Access-Control-Allow-Origin Header, damit er nicht doppelt gesetzt wird
     headers = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'https://test.aleksanderbauer.de',  # Ändere dies zu deiner Domain
-        'Access-Control-Allow-Headers': 'Content-Type,Accept',  # Füge Accept hinzu
+        'Access-Control-Allow-Headers': 'content-type,accept',
         'Access-Control-Allow-Methods': 'OPTIONS,POST',
         'Access-Control-Max-Age': '86400'  # Cache CORS response für 24 Stunden
     }
