@@ -15,21 +15,29 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             // Aktualisiere die Anzeige im Sidebar-Menü
             const ipElementSidebar = document.getElementById("ip-address-sidebar");
-            ipElementSidebar.innerText = `${data.ip}`;
+            if (ipElementSidebar) {
+                ipElementSidebar.innerText = `${data.ip}`;
+            }
 
             // Aktualisiere die Anzeige im Abschnitt "Four"
             const ipElementMain = document.getElementById("ip-address-main");
-            ipElementMain.innerText = `🌐 Deine IP-Adresse: ${data.ip}`;
+            if (ipElementMain) {
+                ipElementMain.innerText = `🌐 Deine IP-Adresse: ${data.ip}`;
+            }
         } catch (error) {
             console.error("Fehler beim Abrufen der IP-Adresse:", error);
 
             // Fehleranzeige im Sidebar-Menü
             const ipElementSidebar = document.getElementById("ip-address-sidebar");
-            ipElementSidebar.innerText = "⚠️ Fehler beim Laden der IP-Adresse";
+            if (ipElementSidebar) {
+                ipElementSidebar.innerText = "⚠️ Fehler beim Laden der IP-Adresse";
+            }
 
             // Fehleranzeige im Abschnitt "Four"
             const ipElementMain = document.getElementById("ip-address-main");
-            ipElementMain.innerText = "⚠️ Fehler beim Laden der IP-Adresse";
+            if (ipElementMain) {
+                ipElementMain.innerText = "⚠️ Fehler beim Laden der IP-Adresse";
+            }
         }
     }
 
@@ -42,37 +50,47 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
 
             let data = await response.json();
-            if (data !== undefined) {
+            if (data !== undefined && counter) {
                 counter.innerHTML = `👀 Views: ${data}`;
-            } else {
+            } else if (counter) {
                 console.error("Views-Wert fehlt in der Antwort");
                 counter.innerHTML = "⚠️ Fehler beim Laden der Views";
             }
         } catch (error) {
             console.error("Fehler beim Abrufen des Besucherzählers:", error);
-            counter.innerHTML = "⚠️ Fehler beim Laden";
+            if (counter) {
+                counter.innerHTML = "⚠️ Fehler beim Laden";
+            }
         }
     }
 
     // Passwortschutz für den geschützten Bereich
-    document.getElementById("protected-link").addEventListener("click", function (event) {
-    event.preventDefault(); // Verhindert das direkte Weiterleiten
+    const protectedLink = document.getElementById("protected-link");
+    if (protectedLink) {
+        protectedLink.addEventListener("click", function (event) {
+            event.preventDefault(); // Verhindert das direkte Weiterleiten
 
-    const password = prompt("Bitte geben Sie das Passwort ein:");
-    const correctPassword = "7777777"; // Setze hier dein gewünschtes Passwort
+            const password = prompt("Bitte geben Sie das Passwort ein:");
+            const correctPassword = "7777777"; // Setze hier dein gewünschtes Passwort
 
-    if (password === correctPassword) {
-        window.location.href = "privat.html"; // Weiterleitung zur geschützten Seite
-    } else {
-        alert("Falsches Passwort! Zugriff verweigert.");
+            if (password === correctPassword) {
+                window.location.href = "privat.html"; // Weiterleitung zur geschützten Seite
+            } else {
+                alert("Falsches Passwort! Zugriff verweigert.");
+            }
+        });
     }
-});
 
     // Cookie Consent Management
     function manageCookieConsent() {
         const cookieBanner = document.getElementById('cookie-banner');
         const acceptButton = document.getElementById('accept-cookies');
         const declineButton = document.getElementById('decline-cookies');
+        
+        if (!cookieBanner || !acceptButton || !declineButton) {
+            console.error("Cookie-Banner oder Buttons nicht gefunden!");
+            return false;
+        }
         
         // Prüfe, ob Consent bereits gegeben wurde
         const hasConsent = localStorage.getItem('cookieConsent') === 'true';
@@ -102,8 +120,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                 el.innerText = "IP-Anzeige deaktiviert";
             });
             
-            const counter = document.querySelector(".counter-number");
-            if (counter) counter.innerText = "Zähler deaktiviert";
+            if (counter) {
+                counter.innerText = "Zähler deaktiviert";
+            }
         });
         
         return hasConsent;
@@ -115,11 +134,5 @@ document.addEventListener("DOMContentLoaded", async function () {
         // Wenn Zustimmung bereits vorhanden, Funktionen ausführen
         fetchIPAddress();
         updateCounter();
-    } else {
-        // Funktionsaufrufe aus dem ursprünglichen Code entfernen
-        // (werden jetzt durch das Cookie-Management gesteuert)
-        // ENTFERNE oder kommentiere diese Zeilen aus:
-        // fetchIPAddress();
-        // updateCounter();
     }
 });
