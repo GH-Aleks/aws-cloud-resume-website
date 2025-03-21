@@ -27,37 +27,54 @@
             <!-- Main -->
             <section id="main" class="wrapper">
                 <div class="inner">
-                    <h1 class="major">Meine Cloud-Projekte: Praktische Erfahrungen mit AWS</h1>
+                    <h1 class="major">Praxisprojekte: Moderne Cloud-Infrastruktur & DevOps-Praktiken</h1>
 
-                    <!-- Projekt: Cloud Resume -->
-                    <h2>Cloud Resume: Eine serverlose Webseite mit AWS</h2>
-                    <p>Mein Cloud-Resume-Projekt ist ein Beispiel für die praktische Anwendung moderner AWS-Technologien. Die Webseite wurde vollständig serverlos entwickelt und nutzt folgende AWS-Services:</p>
+                    <!-- Projekt: Cloud Resume Challenge -->
+                    <h2>Cloud Resume Challenge: Serverlose Webarchitektur mit CI/CD</h2>
+                    <p>Dieses Projekt demonstriert meine praktischen Fähigkeiten in der AWS Cloud und mit modernen Entwicklungswerkzeugen:</p>
                     <ul>
-                        <li><strong>Amazon S3:</strong> Hosting der statischen Webseite.</li>
-                        <li><strong>CloudFront:</strong> Bereitstellung der Webseite über ein Content Delivery Network (CDN) mit HTTPS-Unterstützung.</li>
-                        <li><strong>Route 53:</strong> DNS-Verwaltung und Domain-Konfiguration.</li>
-                        <li><strong>GitHub Actions:</strong> Automatisierte CI/CD-Pipeline für Tests und Deployment.</li>
+                        <li><strong>Frontend-Hosting</strong>: Statische Website in Amazon S3, bereitgestellt über CloudFront mit HTTPS.</li>
+                        <li><strong>CI/CD-Pipeline</strong>: Vollautomatisierte Deployments mit GitHub Actions für Test- und Produktionsumgebungen.</li>
+                        <li><strong>Entwicklungsumgebung</strong>: Einsatz von VS Code, Git und GitHub für effiziente Codeentwicklung und Versionierung.</li>
+                        <li><strong>GitHub Copilot Integration</strong>: Erste Erfahrungen mit KI-gestützter Codeentwicklung, die meine Produktivität steigert.</li>
+                        <li><strong>Infrastruktur-Automatisierung</strong>: Definition von Cloud-Ressourcen als Code für reproduzierbare Bereitstellungen.</li>
+                        <li><strong>Domain-Management</strong>: Konfiguration und Verwaltung mehrerer Umgebungen über Route 53.</li>
                     </ul>
 
                     <!-- Projekt: Besucherzähler mit AWS -->
-                    <h2>Besucherzähler mit AWS</h2>
-                    <p>Dieses Projekt implementiert einen dynamischen Besucherzähler, der die Anzahl der Seitenaufrufe in Echtzeit anzeigt. Die Implementierung umfasst folgende Technologien und Schritte:</p>
+                    <h2>Serverloser Besucherzähler mit Lambda & DynamoDB</h2>
+                    <p>Eine praktische Implementierung serverloser Technologien:</p>
                     <ul>
-                        <li><strong>Frontend (JavaScript):</strong> Der Besucherzähler wird mit JavaScript dynamisch geladen und auf der Webseite angezeigt.</li>
-                        <li><strong>Backend (AWS Lambda):</strong> Eine serverlose Lambda-Funktion verarbeitet die Anfragen und aktualisiert die Anzahl der Seitenaufrufe.</li>
-                        <li><strong>AWS Lambda Function URLs:</strong> Die Lambda-Funktion wird über eine spezielle URL aufgerufen, die direkt mit der Funktion verknüpft ist.</li>
-                        <li><strong>DynamoDB:</strong> Die Anzahl der Seitenaufrufe wird in einer DynamoDB-Tabelle gespeichert und bei jedem Aufruf aktualisiert.</li>
+                        <li><strong>Python-Entwicklung</strong>: Programmierung von Lambda-Funktionen in Python mit Boto3 für AWS-Ressourcenzugriff.</li>
+                        <li><strong>Serverless Computing</strong>: Einsatz von AWS Lambda für skalierbare, ereignisgesteuerte Verarbeitung.</li>
+                        <li><strong>Lambda Function URLs</strong>: Direkter API-Zugriff ohne API Gateway für einfachere Architektur.</li>
+                        <li><strong>NoSQL-Datenbank</strong>: Nutzung von DynamoDB als skalierbare, hochverfügbare Datenbank für Besucher-Tracking.</li>
+                        <li><strong>JavaScript-Frontend</strong>: Asynchrone API-Aufrufe und DOM-Manipulation für dynamische Website-Elemente.</li>
+                        <li><strong>Fehlerbehandlung</strong>: Robuste Error-Handling-Strategien sowohl im Frontend als auch im Backend.</li>
+                    </ul>
+                    
+                    <!-- Projekt: IP-Adresse -->
+                    <h2>API Gateway & Lambda-Integration für IP-Anzeige</h2>
+                    <p>Ein Projekt, das die Stärken eines vollwertigen API-Managements demonstriert:</p>
+                    <ul>
+                        <li><strong>REST API-Design</strong>: Erstellung einer RESTful API mit AWS API Gateway.</li>
+                        <li><strong>Lambda-Integration</strong>: Backend-Logik in Lambda mit Python für die Verarbeitung von Request-Headern.</li>
+                        <li><strong>CORS-Konfiguration</strong>: Sichere domainübergreifende Anfragen für Integration mit Webseiten.</li>
+                        <li><strong>Datenschutz</strong>: Implementation eines Consent-Mechanismus mit JavaScript und LocalStorage.</li>
+                        <li><strong>Umgebungsvariablen</strong>: Konfiguration verschiedener Einstellungen für Test- und Produktionsumgebungen.</li>
+                        <li><strong>Sicherheitsaspekte</strong>: Absicherung der API durch Throttling und IAM-Berechtigungen.</li>
                     </ul>
 
-                    <!-- Projekt: IP-Adresse: Anzeige der Besucher-IP mit AWS API Gateway -->
-                    <h2>IP-Adresse: Anzeige der Besucher-IP mit AWS API Gateway</h2>
-                    <p>Dieses Projekt zeigt die IP-Adresse der Besucher an, ohne sie zu speichern. Die Implementierung umfasst:</p>
+                    <!-- Docker-Erfahrungen -->
+                    <h2>Container-Technologien: Erste Erfahrungen mit Docker</h2>
+                    <p>Im Rahmen meiner Weiterbildung habe ich begonnen, mich mit Containerisierung vertraut zu machen:</p>
                     <ul>
-                        <li><strong>AWS Lambda:</strong> Die Funktion verarbeitet eingehende Anfragen und extrahiert die IP-Adresse des Besuchers.</li>
-                        <li><strong>API Gateway:</strong> Bereitstellung eines Endpunkts für die IP-Anzeige.</li>
-                        <li><strong>Keine Speicherung der IP:</strong> Die IP-Adresse wird lediglich angezeigt, aber nicht gespeichert.</li>
+                        <li><strong>Dockerfile</strong>: Erstellung von Container-Definitionen für Python-Lambda-Funktionen.</li>
+                        <li><strong>Container-Grundlagen</strong>: Verständnis der Vorteile von Isolation, Portabilität und Konsistenz.</li>
+                        <li><strong>AWS ECR</strong>: Erste Schritte mit Amazon Elastic Container Registry für Image-Verwaltung.</li>
+                        <li><strong>Multistage-Builds</strong>: Optimierung von Container-Images für Effizienz und Sicherheit.</li>
+                        <li><strong>Entwicklungspotenzial</strong>: Aktives Lernen im Bereich Containerisierung für zukünftige Projekte.</li>
                     </ul>
-                    <p>Die IP-Adresse wird bei jedem Seitenaufruf angezeigt, ohne dass sie in einer Datenbank gespeichert wird.</p>
                 </div>
             </section>
 
