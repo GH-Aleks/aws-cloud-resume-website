@@ -19,11 +19,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                 ipElementSidebar.innerText = `${data.ip}`;
             }
 
-            // Aktualisiere die Anzeige im Abschnitt "Four"
-            const ipElementMain = document.getElementById("ip-address-main");
-            if (ipElementMain) {
-                ipElementMain.innerText = `🌐 Deine IP-Adresse: ${data.ip}`;
-            }
         } catch (error) {
             console.error("Fehler beim Abrufen der IP-Adresse:", error);
 
@@ -33,11 +28,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                 ipElementSidebar.innerText = "⚠️ Fehler beim Laden der IP-Adresse";
             }
 
-            // Fehleranzeige im Abschnitt "Four"
-            const ipElementMain = document.getElementById("ip-address-main");
-            if (ipElementMain) {
-                ipElementMain.innerText = "⚠️ Fehler beim Laden der IP-Adresse";
-            }
         }
     }
 
@@ -64,22 +54,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
 
-    // Passwortschutz für den geschützten Bereich
-    const protectedLink = document.getElementById("protected-link");
-    if (protectedLink) {
-        protectedLink.addEventListener("click", function (event) {
-            event.preventDefault(); // Verhindert das direkte Weiterleiten
-
-            const password = prompt("Bitte geben Sie das Passwort ein:");
-            const correctPassword = "7777777"; // Setze hier dein gewünschtes Passwort
-
-            if (password === correctPassword) {
-                window.location.href = "privat.html"; // Weiterleitung zur geschützten Seite
-            } else {
-                alert("Falsches Passwort! Zugriff verweigert.");
-            }
-        });
-    }
 
     // Cookie Consent Management
     function manageCookieConsent() {
