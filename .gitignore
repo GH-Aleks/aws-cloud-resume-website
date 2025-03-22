@@ -1,6 +1,21 @@
 # Local .terraform directories
 **/.terraform/*
 
+# Lokale Docker-Entwicklungsumgebung
+infra/docker-compose.yml
+infra/Dockerfile
+infra/dynamodb-data/
+infra/start-local-env.sh
+infra/init-dynamodb.sh
+infra/lambda/Dockerfile
+
+# DynamoDB lokale Daten
+*.db
+
+# Docker spezifische Dateien
+docker-compose.override.yml
+.dockerignore
+
 # .tfstate files
 *.tfstate
 *.tfstate.*
