@@ -1,5 +1,4 @@
 <!DOCTYPE HTML>
-
 <html>
     <head>
         <title>Feedback - Aleksander Bauer</title>
@@ -114,6 +113,9 @@
                     const company = document.getElementById("company").value || "Anonym";
                     const position = document.getElementById("position").value || "Unbekannt";
 
+                    // Lokale Entwicklung erkennen
+                    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                    
                     // Sende die Daten an die Lambda-API
                     try {
                         const response = await fetch(endpoints.feedback_api, {
@@ -122,16 +124,35 @@
                                 "Content-Type": "application/json",
                                 "Accept": "application/json"
                             },
-                            body: JSON.stringify({
-                                skillCategory,
-                                comment,
-                                company,
-                                position,
-                            }),
+                            body: isLocalhost 
+                                // Für lokale Entwicklung: Lambda erwartet einen verschachtelten "body"-Parameter
+                                ? JSON.stringify({
+                                    "body": JSON.stringify({
+                                        skillCategory,
+                                        comment,
+                                        company,
+                                        position,
+                                    })
+                                  }) 
+                                // Für Cloud-Umgebung: Direktes JSON
+                                : JSON.stringify({
+                                    skillCategory,
+                                    comment,
+                                    company,
+                                    position,
+                                })
                         });
 
-                        if (response.ok) {
-                            // Zeige eine Bestätigung an
+                        // Antwort je nach Umgebung anders verarbeiten
+                        if (isLocalhost) {
+                            const responseData = await response.json();
+                            if (responseData.statusCode === 200) {
+                                document.getElementById("feedback-confirmation").style.display = "block";
+                                document.getElementById("feedback-form").reset();
+                            } else {
+                                throw new Error("Fehler beim Senden des Feedbacks: " + JSON.stringify(responseData));
+                            }
+                        } else if (response.ok) {
                             document.getElementById("feedback-confirmation").style.display = "block";
                             document.getElementById("feedback-form").reset();
                         } else {
@@ -143,12 +164,14 @@
                     }
                 });
                 
-                // Environment-Banner (nur für Dev und Staging) hinzufügen
+                // Environment-Banner (alle Umgebungen) hinzufügen
                 const hostname = window.location.hostname;
                 if (hostname.includes('dev.')) {
                     addEnvironmentBanner('DEVELOPMENT');
                 } else if (hostname.includes('stg.')) {
                     addEnvironmentBanner('STAGING');
+                } else if (hostname === 'localhost' || hostname === '127.0.0.1') {
+                    addEnvironmentBanner('LOCAL DEVELOPMENT');
                 }
                 
                 // Umgebungs-Banner hinzufügen
@@ -158,7 +181,9 @@
                     banner.style.top = '0';
                     banner.style.left = '0';
                     banner.style.width = '100%';
-                    banner.style.backgroundColor = environment === 'DEVELOPMENT' ? '#28a745' : '#17a2b8';
+                    banner.style.backgroundColor = environment === 'DEVELOPMENT' ? '#28a745' : 
+                                                  environment === 'STAGING' ? '#17a2b8' : 
+                                                  environment === 'LOCAL DEVELOPMENT' ? '#8134AF' : '#17a2b8';
                     banner.style.color = 'white';
                     banner.style.textAlign = 'center';
                     banner.style.padding = '5px';
