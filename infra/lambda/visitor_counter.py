@@ -14,9 +14,8 @@ class DecimalEncoder(json.JSONEncoder):
 # Dynamische Tabellennamen basierend auf Umgebung
 def get_table_name():
     env = os.environ.get('ENV', 'dev')
-    table_name = os.environ.get('COUNTER_TABLE', f'{env}_visitor_counter')
-    print(f"Using table name: {table_name} for environment: {env}")
-    return table_name
+    base_name = os.environ.get('COUNTER_TABLE', 'dev_visitor_counter')
+    return base_name
 
 # Bedingte DynamoDB-Konfiguration für lokale vs. Cloud-Umgebung
 def get_dynamodb_client():
@@ -25,14 +24,13 @@ def get_dynamodb_client():
     
     if dynamodb_endpoint:
         print(f"Using local DynamoDB endpoint: {dynamodb_endpoint}")
-        return boto3.resource('dynamodb', endpoint_url=dynamodb_endpoint)
+        return boto3.resource('dynamodb', 
+                             endpoint_url=dynamodb_endpoint,
+                             region_name=region,
+                             aws_access_key_id='fake',
+                             aws_secret_access_key='fake')
     else:
-        return boto3.resource(
-            'dynamodb',
-            region_name=region,
-            aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
-            aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY')
-        )
+        return boto3.resource('dynamodb', region_name=region)
 
 # CORS-Header für alle Antworten
 headers = {
@@ -53,7 +51,7 @@ def lambda_handler(event, context):
     try:
         # DynamoDB-Client und Tabellennamen bekommen
         dynamodb = get_dynamodb_client()
-        table_name = get_table_name()  # Verwende die neue Funktion
+        table_name = get_table_name()
         table = dynamodb.Table(table_name)
         
         # Abrufen des aktuellen Zählerstands
