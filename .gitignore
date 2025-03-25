@@ -30,6 +30,17 @@ docker-compose.override.yml
 .dockerignore
 *.db
 
+# Benutzer-spezifische Umgebungsdateien
+infra/user-configs/.env.*
+!infra/user-configs/.env.example
+
+# Dynamisch generierte DynamoDB-Daten
+infra/dynamodb-data-*/
+
+# VS Code Workspace-spezifische Einstellungen
+.vscode/launch.json
+.vscode/tasks.json
+
 # Secrets und Environment-Variablen
 secrets.txt
 .env
