@@ -18,9 +18,14 @@ function getApiEndpoints() {
       get_ip: "https://8gv86zqm2d.execute-api.eu-north-1.amazonaws.com/dev/get_ip"
     },
     stg: {
-      visitor_counter: "https://[STG-VISITOR-COUNTER-URL-SPÄTER-DURCH-TERRAFORM]",
-      feedback_api: "https://[STG-FEEDBACK-URL-SPÄTER-DURCH-TERRAFORM]",
-      get_ip: "https://[STG-API-GATEWAY-URL-SPÄTER-DURCH-TERRAFORM]/stg/get_ip"
+      // Temporär die Dev-Endpunkte verwenden bis Terraform-Setup abgeschlossen ist
+      visitor_counter: "https://i2cy6m7iulxotudls2jufbhkam0uwmzc.lambda-url.eu-north-1.on.aws/",
+      feedback_api: "https://i6u7w2ffvacxwsk274vwfcvkly0btobk.lambda-url.eu-north-1.on.aws/",
+      get_ip: "https://8gv86zqm2d.execute-api.eu-north-1.amazonaws.com/dev/get_ip"
+      // Diese werden später durch Terraform aktualisiert:
+      // visitor_counter: "https://[STG-VISITOR-COUNTER-URL]",
+      // feedback_api: "https://[STG-FEEDBACK-URL]",
+      // get_ip: "https://[STG-API-GATEWAY-URL]/stg/get_ip"
     },
     prod: {
       visitor_counter: "https://i2cy6m7iulxotudls2jufbhkam0uwmzc.lambda-url.eu-north-1.on.aws/",

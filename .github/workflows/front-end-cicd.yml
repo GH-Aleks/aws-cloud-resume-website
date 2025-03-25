@@ -50,7 +50,15 @@ jobs:
             echo "cf_distribution_id=${{ secrets.PROD_CLOUDFRONT_DISTRIBUTION_ID }}" >> $GITHUB_OUTPUT
           elif [ "$ENV" == "stg" ]; then
             echo "s3_bucket=stg-cloud-resume-aleksander" >> $GITHUB_OUTPUT
-            echo "cf_distribution_id=${{ secrets.STG_CLOUDFRONT_DISTRIBUTION_ID }}" >> $GITHUB_OUTPUT
+            
+            # Fallback auf DEV_CLOUDFRONT, wenn STG noch nicht existiert
+            STG_ID="${{ secrets.STG_CLOUDFRONT_DISTRIBUTION_ID }}"
+            if [ -z "$STG_ID" ]; then
+              echo "⚠️ Warnung: STG_CLOUDFRONT_DISTRIBUTION_ID nicht gefunden. Verwende DEV als Fallback."
+              echo "cf_distribution_id=${{ secrets.DEV_CLOUDFRONT_DISTRIBUTION_ID }}" >> $GITHUB_OUTPUT
+            else
+              echo "cf_distribution_id=$STG_ID" >> $GITHUB_OUTPUT
+            fi
           else
             echo "s3_bucket=dev-cloud-resume-aleksander" >> $GITHUB_OUTPUT
             echo "cf_distribution_id=${{ secrets.DEV_CLOUDFRONT_DISTRIBUTION_ID }}" >> $GITHUB_OUTPUT
@@ -93,4 +101,9 @@ jobs:
       # 5. Invalidate CloudFront distribution
       - name: Invalidate CloudFront
         run: |
-          aws cloudfront create-invalidation --distribution-id ${{ needs.determine_environment.outputs.cf_distribution_id }} --paths "/*"
+          # Überprüfe, ob eine Distribution-ID vorhanden ist
+          if [ -n "${{ needs.determine_environment.outputs.cf_distribution_id }}" ]; then
+            aws cloudfront create-invalidation --distribution-id ${{ needs.determine_environment.outputs.cf_distribution_id }} --paths "/*"
+          else
+            echo "⚠️ Keine CloudFront Distribution-ID gefunden, überspringe Invalidierung"
+          fi
