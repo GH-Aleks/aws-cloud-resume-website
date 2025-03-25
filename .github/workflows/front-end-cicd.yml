@@ -1,46 +1,90 @@
-name: Upload Website to S3
+name: Multi-Environment Website Deployment
 
 on:
   push:
     branches:
-      - test-workflow
+      - develop
+      - staging
       - main
   workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - stg
+          - prod
+
+env:
+  AWS_REGION: 'eu-north-1'
+  SOURCE_DIR: 'website'
 
 jobs:
-  deploy:
+  determine_environment:
     runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.set-env.outputs.environment }}
+      s3_bucket: ${{ steps.set-env.outputs.s3_bucket }}
+      cf_distribution_id: ${{ steps.set-env.outputs.cf_distribution_id }}
+    steps:
+      - id: set-env
+        run: |
+          # Set environment based on trigger
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            ENV="${{ github.event.inputs.environment }}"
+          elif [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            ENV="prod"
+          elif [ "${{ github.ref }}" == "refs/heads/staging" ]; then
+            ENV="stg"
+          else
+            ENV="dev"
+          fi
+          echo "environment=$ENV" >> $GITHUB_OUTPUT
+          
+          # Set environment-specific values
+          if [ "$ENV" == "prod" ]; then
+            echo "s3_bucket=cloud-resume-aleksander" >> $GITHUB_OUTPUT
+            echo "cf_distribution_id=${{ secrets.PROD_CLOUDFRONT_DISTRIBUTION_ID }}" >> $GITHUB_OUTPUT
+          elif [ "$ENV" == "stg" ]; then
+            echo "s3_bucket=stg-cloud-resume-aleksander" >> $GITHUB_OUTPUT
+            
+            # Fallback auf DEV_CLOUDFRONT, wenn STG noch nicht existiert
+            STG_ID="${{ secrets.STG_CLOUDFRONT_DISTRIBUTION_ID }}"
+            if [ -z "$STG_ID" ]; then
+              echo "⚠️ Warnung: STG_CLOUDFRONT_DISTRIBUTION_ID nicht gefunden. Verwende DEV als Fallback."
+              echo "cf_distribution_id=${{ secrets.DEV_CLOUDFRONT_DISTRIBUTION_ID }}" >> $GITHUB_OUTPUT
+            else
+              echo "cf_distribution_id=$STG_ID" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "s3_bucket=dev-cloud-resume-aleksander" >> $GITHUB_OUTPUT
+            echo "cf_distribution_id=${{ secrets.DEV_CLOUDFRONT_DISTRIBUTION_ID }}" >> $GITHUB_OUTPUT
+          fi
+
+  deploy:
+    needs: determine_environment
+    runs-on: ubuntu-latest
+    environment: ${{ needs.determine_environment.outputs.environment }}
     steps:
       # 1. Check out the repository
       - uses: actions/checkout@v3
 
-      # 2. Set environment variables based on branch
-      - name: Set environment variables
+      # 2. Show deployment info
+      - name: Show deployment info
         run: |
-          if [[ $GITHUB_REF == 'refs/heads/main' ]]; then
-            echo "AWS_S3_BUCKET=cloud-resume-aleksander" >> $GITHUB_ENV
-            echo "CLOUDFRONT_ID=E3CZT89CDZXZIN" >> $GITHUB_ENV
-            echo "Deploying to PRODUCTION environment"
-          else
-            echo "AWS_S3_BUCKET=test-cloud-resume-aleksander" >> $GITHUB_ENV
-            echo "CLOUDFRONT_ID=${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}" >> $GITHUB_ENV
-            echo "Deploying to TEST environment"
-          fi
-          echo "AWS_REGION=eu-north-1" >> $GITHUB_ENV
-          echo "SOURCE_DIR=website" >> $GITHUB_ENV
-
-      # 3. Debugging: Check environment variables and files
-      - run: echo "AWS_S3_BUCKET=${{ env.AWS_S3_BUCKET }}"
-      - run: echo "SOURCE_DIR=${{ env.SOURCE_DIR }}"
-      - run: echo "CLOUDFRONT_ID=${{ env.CLOUDFRONT_ID }}"
-      - run: ls ${{ env.SOURCE_DIR }}
+          echo "Deploying to environment: ${{ needs.determine_environment.outputs.environment }}"
+          echo "S3 bucket: ${{ needs.determine_environment.outputs.s3_bucket }}"
+          echo "CloudFront distribution: ${{ needs.determine_environment.outputs.cf_distribution_id }}"
 
       # 4. Sync files to S3
       - uses: jakejarvis/s3-sync-action@master
         with:
           args: --follow-symlinks --delete
         env:
-          AWS_S3_BUCKET: ${{ env.AWS_S3_BUCKET }}
+          AWS_S3_BUCKET: ${{ needs.determine_environment.outputs.s3_bucket }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ env.AWS_REGION }}
@@ -57,5 +101,9 @@ jobs:
       # 6. Invalidate CloudFront distribution
       - name: Invalidate CloudFront
         run: |
-          aws cloudfront create-invalidation --distribution-id ${{ env.CLOUDFRONT_ID }} --paths "/*"
-
+          # Überprüfe, ob eine Distribution-ID vorhanden ist
+          if [ -n "${{ needs.determine_environment.outputs.cf_distribution_id }}" ]; then
+            aws cloudfront create-invalidation --distribution-id ${{ needs.determine_environment.outputs.cf_distribution_id }} --paths "/*"
+          else
+            echo "⚠️ Keine CloudFront Distribution-ID gefunden, überspringe Invalidierung"
+          fi

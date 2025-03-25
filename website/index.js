@@ -1,12 +1,15 @@
 // Warte, bis die Seite vollständig geladen ist
 document.addEventListener("DOMContentLoaded", async function () {
     const counter = document.querySelector(".counter-number");
+    // Hole API-Endpunkte basierend auf der aktuellen Umgebung
+    const endpoints = window.apiConfig ? window.apiConfig.getEndpoints() : null;
 
     // Funktion zum Abrufen der IP-Adresse
     async function fetchIPAddress() {
         try {
-            // API Gateway URL
-            const response = await fetch("https://mtrw5y7h0i.execute-api.eu-north-1.amazonaws.com/get_ip");
+            // API Gateway URL aus Konfiguration oder Fallback
+            const ipUrl = endpoints ? endpoints.get_ip : "https://mtrw5y7h0i.execute-api.eu-north-1.amazonaws.com/get_ip";
+            const response = await fetch(ipUrl);
             if (!response.ok) {
                 throw new Error(`HTTP-Fehler! Status: ${response.status}`);
             }
@@ -19,11 +22,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                 ipElementSidebar.innerText = `${data.ip}`;
             }
 
-            // Aktualisiere die Anzeige im Abschnitt "Four"
-            const ipElementMain = document.getElementById("ip-address-main");
-            if (ipElementMain) {
-                ipElementMain.innerText = `🌐 Deine IP-Adresse: ${data.ip}`;
-            }
         } catch (error) {
             console.error("Fehler beim Abrufen der IP-Adresse:", error);
 
@@ -32,19 +30,15 @@ document.addEventListener("DOMContentLoaded", async function () {
             if (ipElementSidebar) {
                 ipElementSidebar.innerText = "⚠️ Fehler beim Laden der IP-Adresse";
             }
-
-            // Fehleranzeige im Abschnitt "Four"
-            const ipElementMain = document.getElementById("ip-address-main");
-            if (ipElementMain) {
-                ipElementMain.innerText = "⚠️ Fehler beim Laden der IP-Adresse";
-            }
         }
     }
 
     // Funktion zum Aktualisieren des Besucherzählers
     async function updateCounter() {
         try {
-            let response = await fetch("https://f3vhz4bbpkchocxhe72st4dqvy0yjeee.lambda-url.eu-north-1.on.aws/");
+            // Counter URL aus Konfiguration oder Fallback
+            const counterUrl = endpoints ? endpoints.visitor_counter : "https://i2cy6m7iulxotudls2jufbhkam0uwmzc.lambda-url.eu-north-1.on.aws/";
+            let response = await fetch(counterUrl);
             if (!response.ok) {
                 throw new Error(`HTTP-Fehler! Status: ${response.status}`);
             }
@@ -62,23 +56,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                 counter.innerHTML = "⚠️ Fehler beim Laden";
             }
         }
-    }
-
-    // Passwortschutz für den geschützten Bereich
-    const protectedLink = document.getElementById("protected-link");
-    if (protectedLink) {
-        protectedLink.addEventListener("click", function (event) {
-            event.preventDefault(); // Verhindert das direkte Weiterleiten
-
-            const password = prompt("Bitte geben Sie das Passwort ein:");
-            const correctPassword = "7777777"; // Setze hier dein gewünschtes Passwort
-
-            if (password === correctPassword) {
-                window.location.href = "privat.html"; // Weiterleitung zur geschützten Seite
-            } else {
-                alert("Falsches Passwort! Zugriff verweigert.");
-            }
-        });
     }
 
     // Cookie Consent Management
@@ -135,4 +112,28 @@ document.addEventListener("DOMContentLoaded", async function () {
         fetchIPAddress();
         updateCounter();
     }
+
+    // Environment-Banner (nur für Dev und Staging) hinzufügen
+    const hostname = window.location.hostname;
+    if (hostname.includes('dev.')) {
+        addEnvironmentBanner('DEVELOPMENT');
+    } else if (hostname.includes('stg.')) {
+        addEnvironmentBanner('STAGING');
+    }
 });
+
+// Umgebungs-Banner hinzufügen
+function addEnvironmentBanner(environment) {
+    const banner = document.createElement('div');
+    banner.style.position = 'fixed';
+    banner.style.top = '0';
+    banner.style.left = '0';
+    banner.style.width = '100%';
+    banner.style.backgroundColor = environment === 'DEVELOPMENT' ? '#28a745' : '#17a2b8';
+    banner.style.color = 'white';
+    banner.style.textAlign = 'center';
+    banner.style.padding = '5px';
+    banner.style.zIndex = '1000';
+    banner.textContent = `${environment} ENVIRONMENT`;
+    document.body.appendChild(banner);
+}
