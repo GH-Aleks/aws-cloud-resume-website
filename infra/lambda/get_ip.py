@@ -10,6 +10,10 @@ def get_headers():
     }
 
 def lambda_handler(event, context):
+    # Log der aktuellen Umgebung für Debugging
+    env = os.environ.get('ENV', 'dev')
+    print(f"IP function running in environment: {env}")
+    
     headers = get_headers()
     
     # Für OPTIONS-Anfragen einfach CORS-Header zurückgeben
@@ -21,21 +25,26 @@ def lambda_handler(event, context):
         }
     
     try:
-        # Lokales Environment Check
-        if os.environ.get('AWS_REGION') == 'local':
+        # Umgebungsspezifische IP-Adressbestimmung
+        if os.environ.get('DYNAMODB_ENDPOINT'):  # Lokale Entwicklungsumgebung
             # Simulierte IP für lokale Entwicklung
             client_ip = '127.0.0.1'
+            print(f"Using simulated IP address for local development in {env} environment")
         else:
             # In AWS: IP aus Event-Objekt extrahieren
             client_ip = event.get('requestContext', {}).get('identity', {}).get('sourceIp', 'unknown')
+            print(f"Extracted client IP: {client_ip} in {env} environment")
         
         return {
             'statusCode': 200,
             'headers': headers,
-            'body': json.dumps({'ip': client_ip})
+            'body': json.dumps({
+                'ip': client_ip,
+                'environment': env  # Optional: Umgebungsinfo im Response
+            })
         }
     except Exception as e:
-        print(f"Fehler: {str(e)}")
+        print(f"Fehler in environment {env}: {str(e)}")
         return {
             'statusCode': 500,
             'headers': headers,
@@ -44,6 +53,10 @@ def lambda_handler(event, context):
 
 # Lokaler Test, nur wenn direkt ausgeführt
 if __name__ == "__main__":
+    # Setze ENV für lokalen Test
+    if not os.environ.get('ENV'):
+        os.environ['ENV'] = 'dev'
+    
     print("Testing IP address retrieval locally")
     result = lambda_handler({}, None)
     print(f"Result: {result}")

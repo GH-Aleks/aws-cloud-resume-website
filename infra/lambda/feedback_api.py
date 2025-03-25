@@ -12,6 +12,13 @@ class DecimalEncoder(json.JSONEncoder):
             return int(obj) if obj % 1 == 0 else float(obj)
         return super(DecimalEncoder, self).default(obj)
 
+# Dynamische Tabellennamen basierend auf Umgebung
+def get_table_name():
+    env = os.environ.get('ENV', 'dev')
+    table_name = os.environ.get('FEEDBACK_TABLE', f'{env}_feedback')
+    print(f"Using table name: {table_name} for environment: {env}")
+    return table_name
+
 # Gemeinsame Funktion für DynamoDB-Client
 def get_dynamodb_client():
     dynamodb_endpoint = os.environ.get('DYNAMODB_ENDPOINT')
@@ -31,15 +38,13 @@ def get_dynamodb_client():
 # Flask-App für lokale Entwicklung
 app = Flask(__name__)
 
-# Tabellennamen konfigurierbar machen
-feedback_table_name = os.environ.get('FEEDBACK_TABLE', 'FeedbackTable')
-
 @app.route('/feedback', methods=['POST'])
 def save_feedback():
     try:
-        # DynamoDB-Client holen
+        # DynamoDB-Client und Tabellennamen holen
         dynamodb = get_dynamodb_client()
-        table = dynamodb.Table(feedback_table_name)
+        table_name = get_table_name()
+        table = dynamodb.Table(table_name)
         
         data = request.json
         skill_category = data['skillCategory']
@@ -47,13 +52,17 @@ def save_feedback():
         company = data.get('company', 'Anonym')
         position = data.get('position', 'Unbekannt')
 
+        # Umgebung für Cross-Environment-Analysen speichern
+        env = os.environ.get('ENV', 'dev')
+
         table.put_item(Item={
             'id': str(datetime.utcnow()),
             'skillCategory': skill_category,
             'comment': comment,
             'company': company,
             'position': position,
-            'createdAt': datetime.utcnow().isoformat()
+            'createdAt': datetime.utcnow().isoformat(),
+            'environment': env
         })
 
         return jsonify({'message': 'Feedback erfolgreich gespeichert!'}), 200
@@ -63,6 +72,10 @@ def save_feedback():
 
 # Lambda-Handler für AWS
 def lambda_handler(event, context):
+    # Log der aktuellen Umgebung für Debugging
+    env = os.environ.get('ENV', 'dev')
+    print(f"Feedback function running in environment: {env}")
+    
     # CORS-Header für alle Antworten
     headers = {
         'Content-Type': 'application/json',
@@ -85,9 +98,10 @@ def lambda_handler(event, context):
         }
     
     try:
-        # DynamoDB-Client holen
+        # DynamoDB-Client und Tabellennamen holen
         dynamodb = get_dynamodb_client()
-        table = dynamodb.Table(feedback_table_name)
+        table_name = get_table_name()
+        table = dynamodb.Table(table_name)
         
         # Body parsen
         if 'body' in event:
@@ -111,7 +125,8 @@ def lambda_handler(event, context):
             'comment': comment,
             'company': company,
             'position': position,
-            'createdAt': datetime.utcnow().isoformat()
+            'createdAt': datetime.utcnow().isoformat(),
+            'environment': env  # Speichern der Umgebung für spätere Analyse
         })
         
         return {
