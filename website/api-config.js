@@ -2,7 +2,17 @@
 function getApiEndpoints() {
   const hostname = window.location.hostname;
   
-  // Bestimme Umgebung anhand des Hostnamens
+  // Lokale Entwicklungsumgebung erkennen
+  if (hostname === 'localhost' || hostname === '127.0.0.1') {
+    console.log('Lokale Entwicklungsumgebung erkannt, verwende lokale Endpunkte');
+    return {
+      visitor_counter: "http://localhost:9002/2015-03-31/functions/function/invocations",
+      feedback_api: "http://localhost:9000/2015-03-31/functions/function/invocations",
+      get_ip: "http://localhost:9001/2015-03-31/functions/function/invocations"
+    };
+  }
+  
+  // Bestimme Umgebung anhand des Hostnamens für Cloud-Deployments
   let env = 'prod';
   if (hostname.includes('dev.')) {
     env = 'dev';
