@@ -33,7 +33,7 @@
                             <form id="feedback-form">
                                 <!-- Dropdown für Skills -->
                                 <h2>Bereich:</h2>
-                                <select id="skill-category" name="skill-category" required>
+                                <select id="skill-category" name="skill-category" required autocomplete="off">
                                     <option value="cloud">Cloud-Technologien (AWS, Azure, GCP)</option>
                                     <option value="programming">Programmiersprachen (Python, JavaScript, etc.)</option>
                                     <option value="containerization">Containerisierung & Docker (Multi-Container, Lambda)</option>
@@ -48,11 +48,11 @@
 
                                 <!-- Unternehmen -->
                                 <h2>Unternehmen:</h2>
-                                <input type="text" id="company" name="company" placeholder="Unternehmen (optional)" />
+                                <input type="text" id="company" name="company" placeholder="Unternehmen (optional)" autocomplete="organization" />
 
                                 <!-- Position -->
                                 <h2>Position:</h2>
-                                <select id="position" name="position">
+                                <select id="position" name="position" autocomplete="organization-title">
                                     <option value="">Bitte wählen...</option>
                                     <option value="junior-cloud-engineer">Junior Cloud Engineer</option>
                                     <option value="junior-devops-engineer">Junior DevOps Engineer</option>
@@ -116,7 +116,20 @@
                     // Lokale Entwicklung erkennen
                     const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
                     
-                    // Sende die Daten an die Lambda-API
+                    // Für lokale Entwicklung: Simulieren statt API-Aufrufe mit CORS-Problemen
+                    if (isLocalhost) {
+                        console.log("Lokale Entwicklung erkannt - simuliere erfolgreiche Feedback-Übermittlung");
+                        console.log("Feedback-Daten:", { skillCategory, comment, company, position });
+                        
+                        // Simulierte Verarbeitung (ohne tatsächlichen API-Aufruf)
+                        setTimeout(() => {
+                            document.getElementById("feedback-confirmation").style.display = "block";
+                            document.getElementById("feedback-form").reset();
+                        }, 500);
+                        return;
+                    }
+                    
+                    // Sende die Daten an die Lambda-API (nur in Cloud-Umgebungen)
                     try {
                         const response = await fetch(endpoints.feedback_api, {
                             method: "POST",
@@ -124,35 +137,15 @@
                                 "Content-Type": "application/json",
                                 "Accept": "application/json"
                             },
-                            body: isLocalhost 
-                                // Für lokale Entwicklung: Lambda erwartet einen verschachtelten "body"-Parameter
-                                ? JSON.stringify({
-                                    "body": JSON.stringify({
-                                        skillCategory,
-                                        comment,
-                                        company,
-                                        position,
-                                    })
-                                  }) 
-                                // Für Cloud-Umgebung: Direktes JSON
-                                : JSON.stringify({
-                                    skillCategory,
-                                    comment,
-                                    company,
-                                    position,
-                                })
+                            body: JSON.stringify({
+                                skillCategory,
+                                comment,
+                                company,
+                                position,
+                            })
                         });
 
-                        // Antwort je nach Umgebung anders verarbeiten
-                        if (isLocalhost) {
-                            const responseData = await response.json();
-                            if (responseData.statusCode === 200) {
-                                document.getElementById("feedback-confirmation").style.display = "block";
-                                document.getElementById("feedback-form").reset();
-                            } else {
-                                throw new Error("Fehler beim Senden des Feedbacks: " + JSON.stringify(responseData));
-                            }
-                        } else if (response.ok) {
+                        if (response.ok) {
                             document.getElementById("feedback-confirmation").style.display = "block";
                             document.getElementById("feedback-form").reset();
                         } else {

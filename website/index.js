@@ -6,9 +6,26 @@ document.addEventListener("DOMContentLoaded", async function () {
     
     console.log("Verfügbare API-Endpunkte:", endpoints);
 
+    // Temporäre Simulation für lokale Entwicklung
+    const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    
+    if (isLocalDev) {
+        // Simulierte Werte anzeigen statt API-Aufrufe zu versuchen
+        setTimeout(() => {
+            const ipElement = document.getElementById("ip-address-sidebar");
+            if (ipElement) ipElement.innerText = "127.0.0.1 (lokale Entwicklung)";
+            
+            const counterElement = document.querySelector(".counter-number");
+            if (counterElement) counterElement.innerHTML = "👀 Views: 42 (lokaler Test)";
+        }, 500);
+    }
+
     // Funktion zum Abrufen der IP-Adresse
     async function fetchIPAddress() {
         try {
+            // Wenn lokale Entwicklung und temporäre Anzeige aktiv, direkt zurückkehren
+            if (isLocalDev) return;
+            
             console.log("Versuche IP-Adresse zu laden...");
             
             // API Gateway URL aus Konfiguration oder Fallback
@@ -18,41 +35,12 @@ document.addEventListener("DOMContentLoaded", async function () {
             let response;
             let data;
             
-            // Spezielle Behandlung für lokale Entwicklung
-            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-                response = await fetch(ipUrl, {
-                    method: 'POST',
-                    body: JSON.stringify({}),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP-Fehler! Status: ${response.status}`);
-                }
-                
-                // Für lokale Entwicklung: Lambda-Antwort enthält verschachtelte Daten
-                const lambdaResponse = await response.json();
-                console.log("Lambda-Antwort (IP):", lambdaResponse);
-                
-                try {
-                    // Extrahiere den eigentlichen Wert aus dem 'body' der Lambda-Antwort
-                    data = JSON.parse(lambdaResponse.body);
-                    console.log("Extrahierte IP-Daten:", data);
-                } catch (parseError) {
-                    console.error("Fehler beim Parsen der IP-Daten:", parseError);
-                    console.log("Rohinhalt:", lambdaResponse.body);
-                    data = { ip: "Parserfehler" };
-                }
-            } else {
-                // Normale Cloud-Anfrage
-                response = await fetch(ipUrl);
-                if (!response.ok) {
-                    throw new Error(`HTTP-Fehler! Status: ${response.status}`);
-                }
-                data = await response.json();
+            // Normale Cloud-Anfrage
+            response = await fetch(ipUrl);
+            if (!response.ok) {
+                throw new Error(`HTTP-Fehler! Status: ${response.status}`);
             }
+            data = await response.json();
 
             // Aktualisiere die Anzeige im Sidebar-Menü
             const ipElementSidebar = document.getElementById("ip-address-sidebar");
@@ -76,56 +64,21 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Funktion zum Aktualisieren des Besucherzählers
     async function updateCounter() {
         try {
+            // Wenn lokale Entwicklung und temporäre Anzeige aktiv, direkt zurückkehren
+            if (isLocalDev) return;
+            
             console.log("Versuche Besucherzähler zu laden...");
             
             // Counter URL aus Konfiguration oder Fallback
             const counterUrl = endpoints ? endpoints.visitor_counter : "https://i2cy6m7iulxotudls2jufbhkam0uwmzc.lambda-url.eu-north-1.on.aws/";
             console.log("Counter-API URL:", counterUrl);
             
-            let response;
-            let data;
-            
-            // Spezielle Behandlung für lokale Entwicklung
-            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-                response = await fetch(counterUrl, {
-                    method: 'POST',
-                    body: JSON.stringify({}),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP-Fehler! Status: ${response.status}`);
-                }
-                
-                // Für lokale Entwicklung: Lambda-Antwort enthält verschachtelte Daten
-                const lambdaResponse = await response.json();
-                console.log("Lambda-Antwort (Counter):", lambdaResponse);
-                
-                try {
-                    // Extrahiere den eigentlichen Wert aus dem 'body' der Lambda-Antwort
-                    // Da der Counter einfach als Zahl zurückgegeben wird
-                    data = JSON.parse(lambdaResponse.body);
-                    console.log("Extrahierter Zählerstand:", data);
-                } catch (parseError) {
-                    console.error("Fehler beim Parsen des Zählerstands:", parseError);
-                    console.log("Rohinhalt:", lambdaResponse.body);
-                    // Wenn es eine Zahl ist, direkt verwenden
-                    if (!isNaN(lambdaResponse.body)) {
-                        data = parseInt(lambdaResponse.body);
-                    } else {
-                        data = 0;
-                    }
-                }
-            } else {
-                // Normale Cloud-Anfrage
-                response = await fetch(counterUrl);
-                if (!response.ok) {
-                    throw new Error(`HTTP-Fehler! Status: ${response.status}`);
-                }
-                data = await response.json();
+            // Normale Cloud-Anfrage
+            const response = await fetch(counterUrl);
+            if (!response.ok) {
+                throw new Error(`HTTP-Fehler! Status: ${response.status}`);
             }
+            const data = await response.json();
 
             if (data !== undefined && counter) {
                 counter.innerHTML = `👀 Views: ${data}`;
@@ -201,7 +154,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         updateCounter();
     }
 
-    // Environment-Banner (nur für Dev und Staging) hinzufügen
+    // Environment-Banner (für alle Umgebungen) hinzufügen
     const hostname = window.location.hostname;
     if (hostname.includes('dev.')) {
         addEnvironmentBanner('DEVELOPMENT');
