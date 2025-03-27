@@ -1,11 +1,16 @@
 // Warte, bis die Seite vollständig geladen ist
 document.addEventListener("DOMContentLoaded", async function () {
     const counter = document.querySelector(".counter-number");
-    // Hole API-Endpunkte basierend auf der aktuellen Umgebung
-    const endpoints = window.apiConfig ? window.apiConfig.getEndpoints() : null;
     
-    console.log("Verfügbare API-Endpunkte:", endpoints);
-
+    // Hole API-Endpunkte basierend auf der aktuellen Umgebung
+    let endpoints;
+    try {
+        endpoints = await window.apiConfig.getEndpoints();
+        console.log("Verfügbare API-Endpunkte:", endpoints);
+    } catch (error) {
+        console.error("Fehler beim Laden der API-Endpunkte:", error);
+    }
+    
     // Temporäre Simulation für lokale Entwicklung
     const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
     
@@ -28,19 +33,19 @@ document.addEventListener("DOMContentLoaded", async function () {
             
             console.log("Versuche IP-Adresse zu laden...");
             
-            // API Gateway URL aus Konfiguration oder Fallback
-            const ipUrl = endpoints ? endpoints.get_ip : "https://mtrw5y7h0i.execute-api.eu-north-1.amazonaws.com/get_ip";
+            // API Gateway URL aus Konfiguration
+            if (!endpoints || !endpoints.get_ip) {
+                throw new Error("IP-API-Endpunkt nicht verfügbar");
+            }
+            
+            const ipUrl = endpoints.get_ip;
             console.log("IP-API URL:", ipUrl);
             
-            let response;
-            let data;
-            
-            // Normale Cloud-Anfrage
-            response = await fetch(ipUrl);
+            const response = await fetch(ipUrl);
             if (!response.ok) {
                 throw new Error(`HTTP-Fehler! Status: ${response.status}`);
             }
-            data = await response.json();
+            const data = await response.json();
 
             // Aktualisiere die Anzeige im Sidebar-Menü
             const ipElementSidebar = document.getElementById("ip-address-sidebar");
@@ -69,8 +74,12 @@ document.addEventListener("DOMContentLoaded", async function () {
             
             console.log("Versuche Besucherzähler zu laden...");
             
-            // Counter URL aus Konfiguration oder Fallback
-            const counterUrl = endpoints ? endpoints.visitor_counter : "https://i2cy6m7iulxotudls2jufbhkam0uwmzc.lambda-url.eu-north-1.on.aws/";
+            // Counter URL aus Konfiguration
+            if (!endpoints || !endpoints.visitor_counter) {
+                throw new Error("Visitor-Counter-Endpunkt nicht verfügbar");
+            }
+            
+            const counterUrl = endpoints.visitor_counter;
             console.log("Counter-API URL:", counterUrl);
             
             // Normale Cloud-Anfrage
@@ -80,9 +89,9 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
             const data = await response.json();
 
-            if (data !== undefined && counter) {
-                counter.innerHTML = `👀 Views: ${data}`;
-                console.log("Zählerstand gesetzt:", data);
+            if (data.views !== undefined && counter) {
+                counter.innerHTML = `👀 Views: ${data.views}`;
+                console.log("Zählerstand gesetzt:", data.views);
             } else if (counter) {
                 console.error("Views-Wert fehlt in der Antwort oder counter Element nicht gefunden");
                 console.log("data:", data);
@@ -131,16 +140,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         declineButton.addEventListener('click', () => {
             localStorage.setItem('cookieConsent', 'false');
             cookieBanner.style.display = 'none';
-            
-            // IP-Adresse und Besucherzähler ausblenden
-            const ipElements = document.querySelectorAll("[id^='ip-address']");
-            ipElements.forEach(el => {
-                el.innerText = "IP-Anzeige deaktiviert";
-            });
-            
-            if (counter) {
-                counter.innerText = "Zähler deaktiviert";
-            }
         });
         
         return hasConsent;
