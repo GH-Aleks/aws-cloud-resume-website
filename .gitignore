@@ -14,6 +14,39 @@ terraform/environments/*.local.tf
 backend.conf
 outputs/terraform_outputs.json
 
+# Zusätzliche Terraform-spezifische Dateien
+.terraform.tfstate.lock.info
+terraform/.terraform/
+crash.log
+**/terraform.tfvars.json
+**/*.auto.tfvars
+**/*.auto.tfvars.json
+
+# Terraform-Pläne in CI/CD
+.terraform-plan-*
+
+# IDE-spezifische Terraform-Erweiterungen
+.terraformrc
+terraform.rc
+
+# Terraform-Ausgabe-Dateien
+api-urls-*.json
+terraform-output-*.json
+terraform/**/outputs/*.json
+
+# Lokale Lambda-Paketierungen
+terraform/modules/lambda/**/package/
+terraform/modules/lambda/**/*.zip
+
+# Terraform state backend Konfiguration
+terraform/backend.conf
+
+# Terraform-generierte Output-Dateien für Frontend
+website/terraform-outputs.json
+
+# Lokale Terraform-Variablen
+terraform/**/*.local.tfvars
+
 # AWS
 .aws/
 credentials
@@ -29,6 +62,17 @@ infra/lambda/Dockerfile
 docker-compose.override.yml
 .dockerignore
 *.db
+
+# Benutzer-spezifische Umgebungsdateien
+infra/user-configs/.env.*
+!infra/user-configs/.env.example
+
+# Dynamisch generierte DynamoDB-Daten
+infra/dynamodb-data-*/
+
+# VS Code Workspace-spezifische Einstellungen
+.vscode/launch.json
+.vscode/tasks.json
 
 # Secrets und Environment-Variablen
 secrets.txt
