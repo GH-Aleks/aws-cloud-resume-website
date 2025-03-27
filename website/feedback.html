@@ -100,91 +100,67 @@
             <script src="./index.js"></script>
             
             <!-- Feedback Form Script -->
-            <script>
-                document.getElementById("feedback-form").addEventListener("submit", async function (event) {
-                    event.preventDefault(); // Verhindert das Neuladen der Seite
+<script>
+    document.getElementById("feedback-form").addEventListener("submit", async function (event) {
+        event.preventDefault(); // Verhindert das Neuladen der Seite
 
-                    // Umgebungsspezifischen Endpunkt abrufen
-                    const endpoints = window.apiConfig.getEndpoints();
-                    
-                    // Sammle die Formulardaten
-                    const skillCategory = document.getElementById("skill-category").value;
-                    const comment = document.getElementById("comment").value;
-                    const company = document.getElementById("company").value || "Anonym";
-                    const position = document.getElementById("position").value || "Unbekannt";
+        try {
+            // Umgebungsspezifischen Endpunkt abrufen
+            const endpoints = await window.apiConfig.getEndpoints();
+            
+            // Sammle die Formulardaten
+            const skillCategory = document.getElementById("skill-category").value;
+            const comment = document.getElementById("comment").value;
+            const company = document.getElementById("company").value || "Anonym";
+            const position = document.getElementById("position").value || "Unbekannt";
 
-                    // Lokale Entwicklung erkennen
-                    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-                    
-                    // Für lokale Entwicklung: Simulieren statt API-Aufrufe mit CORS-Problemen
-                    if (isLocalhost) {
-                        console.log("Lokale Entwicklung erkannt - simuliere erfolgreiche Feedback-Übermittlung");
-                        console.log("Feedback-Daten:", { skillCategory, comment, company, position });
-                        
-                        // Simulierte Verarbeitung (ohne tatsächlichen API-Aufruf)
-                        setTimeout(() => {
-                            document.getElementById("feedback-confirmation").style.display = "block";
-                            document.getElementById("feedback-form").reset();
-                        }, 500);
-                        return;
-                    }
-                    
-                    // Sende die Daten an die Lambda-API (nur in Cloud-Umgebungen)
-                    try {
-                        const response = await fetch(endpoints.feedback_api, {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                                "Accept": "application/json"
-                            },
-                            body: JSON.stringify({
-                                skillCategory,
-                                comment,
-                                company,
-                                position,
-                            })
-                        });
-
-                        if (response.ok) {
-                            document.getElementById("feedback-confirmation").style.display = "block";
-                            document.getElementById("feedback-form").reset();
-                        } else {
-                            throw new Error("Fehler beim Senden des Feedbacks.");
-                        }
-                    } catch (error) {
-                        console.error("Fehler:", error);
-                        alert("Es gab ein Problem beim Senden Ihres Feedbacks. Bitte versuchen Sie es später erneut.");
-                    }
-                });
+            // Lokale Entwicklung erkennen
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            
+            // Für lokale Entwicklung: Simulieren statt API-Aufrufe mit CORS-Problemen
+            if (isLocalhost) {
+                console.log("Lokale Entwicklung erkannt - simuliere erfolgreiche Feedback-Übermittlung");
+                console.log("Feedback-Daten:", { skillCategory, comment, company, position });
                 
-                // Environment-Banner (alle Umgebungen) hinzufügen
-                const hostname = window.location.hostname;
-                if (hostname.includes('dev.')) {
-                    addEnvironmentBanner('DEVELOPMENT');
-                } else if (hostname.includes('stg.')) {
-                    addEnvironmentBanner('STAGING');
-                } else if (hostname === 'localhost' || hostname === '127.0.0.1') {
-                    addEnvironmentBanner('LOCAL DEVELOPMENT');
-                }
-                
-                // Umgebungs-Banner hinzufügen
-                function addEnvironmentBanner(environment) {
-                    const banner = document.createElement('div');
-                    banner.style.position = 'fixed';
-                    banner.style.top = '0';
-                    banner.style.left = '0';
-                    banner.style.width = '100%';
-                    banner.style.backgroundColor = environment === 'DEVELOPMENT' ? '#28a745' : 
-                                                  environment === 'STAGING' ? '#17a2b8' : 
-                                                  environment === 'LOCAL DEVELOPMENT' ? '#8134AF' : '#17a2b8';
-                    banner.style.color = 'white';
-                    banner.style.textAlign = 'center';
-                    banner.style.padding = '5px';
-                    banner.style.zIndex = '1000';
-                    banner.textContent = `${environment} ENVIRONMENT`;
-                    document.body.appendChild(banner);
-                }
-            </script>
+                // Simulierte Verarbeitung (ohne tatsächlichen API-Aufruf)
+                setTimeout(() => {
+                    document.getElementById("feedback-confirmation").style.display = "block";
+                    document.getElementById("feedback-form").reset();
+                }, 500);
+                return;
+            }
+            
+            // Sende die Daten an die Lambda-API (nur in Cloud-Umgebungen)
+            if (!endpoints || !endpoints.feedback_api) {
+                throw new Error("Feedback-API-Endpunkt nicht verfügbar");
+            }
+            
+            const response = await fetch(endpoints.feedback_api, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify({
+                    skillCategory,
+                    comment,
+                    company,
+                    position,
+                })
+            });
+
+            if (response.ok) {
+                document.getElementById("feedback-confirmation").style.display = "block";
+                document.getElementById("feedback-form").reset();
+            } else {
+                throw new Error("Fehler beim Senden des Feedbacks.");
+            }
+        } catch (error) {
+            console.error("Fehler:", error);
+            alert("Es gab ein Problem beim Senden Ihres Feedbacks. Bitte versuchen Sie es später erneut.");
+        }
+    });
+</script>
 
     </body>
 </html>
