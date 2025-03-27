@@ -14,6 +14,30 @@ terraform/environments/*.local.tf
 backend.conf
 outputs/terraform_outputs.json
 
+# Zusätzliche Terraform-spezifische Dateien
+.terraform.tfstate.lock.info
+terraform/.terraform/
+crash.log
+**/terraform.tfvars.json
+**/*.auto.tfvars
+**/*.auto.tfvars.json
+
+# Terraform-Pläne in CI/CD
+.terraform-plan-*
+
+# IDE-spezifische Terraform-Erweiterungen
+.terraformrc
+terraform.rc
+
+# Terraform-Ausgabe-Dateien
+api-urls-*.json
+terraform-output-*.json
+terraform/**/outputs/*.json
+
+# Lokale Lambda-Paketierungen
+terraform/modules/lambda/**/package/
+terraform/modules/lambda/**/*.zip
+
 # Terraform state backend Konfiguration
 terraform/backend.conf
 
