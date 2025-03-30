@@ -45,12 +45,23 @@ document.addEventListener("DOMContentLoaded", async function () {
             if (!response.ok) {
                 throw new Error(`HTTP-Fehler! Status: ${response.status}`);
             }
-            const data = await response.json();
+            
+            // Die Antwort kann verschieden sein, daher allgemein parsen
+            const text = await response.text();
+            let data;
+            
+            try {
+                // Versuche als JSON zu parsen
+                data = JSON.parse(text);
+            } catch (e) {
+                // Falls kein gültiges JSON, verwende den Text direkt
+                data = { ip: text.trim() };
+            }
 
             // Aktualisiere die Anzeige im Sidebar-Menü
             const ipElementSidebar = document.getElementById("ip-address-sidebar");
             if (ipElementSidebar) {
-                ipElementSidebar.innerText = `${data.ip}`;
+                ipElementSidebar.innerText = data.ip || "IP nicht verfügbar";
                 console.log("IP-Adresse gesetzt:", data.ip);
             } else {
                 console.error("Element mit ID 'ip-address-sidebar' nicht gefunden");
@@ -87,14 +98,27 @@ document.addEventListener("DOMContentLoaded", async function () {
             if (!response.ok) {
                 throw new Error(`HTTP-Fehler! Status: ${response.status}`);
             }
-            const data = await response.json();
-
-            if (data.views !== undefined && counter) {
-                counter.innerHTML = `👀 Views: ${data.views}`;
-                console.log("Zählerstand gesetzt:", data.views);
+            
+            // Die Antwort kann verschieden sein, daher vorsichtig parsen
+            const text = await response.text();
+            let views;
+            
+            try {
+                // Versuche als JSON zu parsen
+                const data = JSON.parse(text);
+                views = data.views !== undefined ? data.views : data;
+            } catch (e) {
+                // Falls kein gültiges JSON, verwende den Text als Zahl
+                views = parseInt(text.trim(), 10);
+            }
+            
+            // Überprüfe, ob der Zählerwert gültig ist (eine Zahl)
+            if (!isNaN(views) && counter) {
+                counter.innerHTML = `👀 Views: ${views}`;
+                console.log("Zählerstand gesetzt:", views);
             } else if (counter) {
                 console.error("Views-Wert fehlt in der Antwort oder counter Element nicht gefunden");
-                console.log("data:", data);
+                console.log("data:", text);
                 console.log("counter:", counter);
                 counter.innerHTML = "⚠️ Fehler beim Laden der Views";
             } else {
@@ -110,37 +134,45 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     // Cookie Consent Management
     function manageCookieConsent() {
-        const cookieBanner = document.getElementById('cookie-banner');
-        const acceptButton = document.getElementById('accept-cookies');
-        const declineButton = document.getElementById('decline-cookies');
+        const cookieBanner = document.getElementById("cookie-banner");
+        const acceptButton = document.getElementById("accept-cookies");
+        const declineButton = document.getElementById("decline-cookies");
         
-        if (!cookieBanner || !acceptButton || !declineButton) {
-            console.error("Cookie-Banner oder Buttons nicht gefunden!");
-            return false;
+        // Aktualisiere den Text des Cookie-Banners, falls er existiert
+        if (cookieBanner) {
+            const cookieText = cookieBanner.querySelector("p");
+            if (cookieText) {
+                cookieText.textContent = "Diese Website zeigt Ihre IP-Adresse an und zählt Besucher. Nur die Anzahl der Besucher wird gespeichert, nicht Ihre IP-Adresse.";
+            }
         }
         
         // Prüfe, ob Consent bereits gegeben wurde
-        const hasConsent = localStorage.getItem('cookieConsent') === 'true';
+        let hasConsent = localStorage.getItem("cookieConsent") === "true";
         
-        if (!hasConsent) {
-            cookieBanner.style.display = 'flex';
+        // Wenn keine Entscheidung getroffen wurde, zeige Banner
+        if (localStorage.getItem("cookieConsent") === null && cookieBanner) {
+            cookieBanner.style.display = "block";
         }
         
-        // Event-Listener für "Akzeptieren"
-        acceptButton.addEventListener('click', () => {
-            localStorage.setItem('cookieConsent', 'true');
-            cookieBanner.style.display = 'none';
-            
-            // IP-Adresse und Besucherzähler erst nach Zustimmung laden
-            fetchIPAddress();
-            updateCounter();
-        });
+        // Event-Listener für Accept-Button
+        if (acceptButton) {
+            acceptButton.addEventListener("click", function() {
+                localStorage.setItem("cookieConsent", "true");
+                if (cookieBanner) cookieBanner.style.display = "none";
+                
+                // Nach Zustimmung, Funktionen ausführen
+                fetchIPAddress();
+                updateCounter();
+            });
+        }
         
-        // Event-Listener für "Ablehnen"
-        declineButton.addEventListener('click', () => {
-            localStorage.setItem('cookieConsent', 'false');
-            cookieBanner.style.display = 'none';
-        });
+        // Event-Listener für Decline-Button
+        if (declineButton) {
+            declineButton.addEventListener("click", function() {
+                localStorage.setItem("cookieConsent", "false");
+                if (cookieBanner) cookieBanner.style.display = "none";
+            });
+        }
         
         return hasConsent;
     }
@@ -180,4 +212,12 @@ function addEnvironmentBanner(environment) {
     banner.style.zIndex = '1000';
     banner.textContent = `${environment} ENVIRONMENT`;
     document.body.appendChild(banner);
+}
+
+// Funktion zum manuellen Neuladen der API-Daten
+function reloadApis() {
+    if (confirm("APIs neu laden?")) {
+        fetchIPAddress();
+        updateCounter();
+    }
 }
