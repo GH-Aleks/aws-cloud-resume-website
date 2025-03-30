@@ -40,7 +40,7 @@ function getApiEndpoints() {
           return window.cachedApiEndpoints;
         }
         // Letzter Fallback auf hartcodierte Endpunkte
-        return getFallbackEndpoints(env);
+        return getFallbackEndpoints(hostname);
       });
   } catch (e) {
     console.warn(`Fehler beim dynamischen Laden der API-Endpunkte: ${e}`);
@@ -61,19 +61,22 @@ function getFallbackEndpoints(hostname) {
   
   const endpoints = {
     dev: {
+      // Korrekte DEV-Endpunkte
       visitor_counter: "https://i2cy6m7iulxotudls2jufbhkam0uwmzc.lambda-url.eu-north-1.on.aws/",
       feedback_api: "https://i6u7w2ffvacxwsk274vwfcvkly0btobk.lambda-url.eu-north-1.on.aws/",
       get_ip: "https://8gv86zqm2d.execute-api.eu-north-1.amazonaws.com/dev/get_ip"
     },
     stg: {
+      // Korrekte STG-Endpunkte
       visitor_counter: "https://njcg632f63xoctsonsy6oef5mm0rhfww.lambda-url.eu-north-1.on.aws/",
       feedback_api: "https://ip5bwmeup2e3eoksx6u6iib3ju0htvbc.lambda-url.eu-north-1.on.aws/",
       get_ip: "https://pcucfe7t5g.execute-api.eu-north-1.amazonaws.com/stg/get_ip"
     },
     prod: {
-      visitor_counter: "https://njcg632f63xoctsonsy6oef5mm0rhfww.lambda-url.eu-north-1.on.aws/",
-      feedback_api: "https://ip5bwmeup2e3eoksx6u6iib3ju0htvbc.lambda-url.eu-north-1.on.aws/",
-      get_ip: "https://pcucfe7t5g.execute-api.eu-north-1.amazonaws.com/stg/get_ip"
+      // Korrekte PROD-Endpunkte
+      visitor_counter: "https://uekrhowhaasthgygpi34hxahle0pedme.lambda-url.eu-north-1.on.aws/",
+      feedback_api: "https://shlb4geylk652n5y76oudaylsa0fatrs.lambda-url.eu-north-1.on.aws/",
+      get_ip: "https://jxv029u11f.execute-api.eu-north-1.amazonaws.com/prod/get_ip"
     }
   };
   
