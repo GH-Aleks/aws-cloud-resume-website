@@ -194,6 +194,89 @@ document.addEventListener("DOMContentLoaded", async function () {
     } else if (hostname === 'localhost' || hostname === '127.0.0.1') {
         addEnvironmentBanner('LOCAL DEVELOPMENT');
     }
+    
+    // Debug-Button für Entwicklung und Fehlersuche hinzufügen
+    // Der Button wird auf allen Umgebungen angezeigt, kannst du aber einschränken
+    const showDebugButton = hostname.includes('dev.') || hostname.includes('stg.') || hostname === 'localhost' || hostname === '127.0.0.1';
+    
+    if (showDebugButton) {
+        const debugButton = document.createElement('button');
+        debugButton.textContent = "🔄 Debug APIs";
+        debugButton.style.position = 'fixed';
+        debugButton.style.bottom = '20px';
+        debugButton.style.right = '20px';
+        debugButton.style.zIndex = '1000';
+        debugButton.style.padding = '10px';
+        debugButton.style.backgroundColor = '#f44336';
+        debugButton.style.color = 'white';
+        debugButton.style.border = 'none';
+        debugButton.style.borderRadius = '4px';
+        debugButton.style.cursor = 'pointer';
+        debugButton.style.boxShadow = '0 2px 5px rgba(0,0,0,0.3)';
+        
+        debugButton.addEventListener('click', async function() {
+            try {
+                alert("Debug-Modus aktiviert - siehe Konsole für Details");
+                console.log("--- API DEBUG INFO ---");
+                console.log("Hostname:", window.location.hostname);
+                console.log("Aktuelle Endpunkte:", endpoints);
+                console.log("HTML Elemente vorhanden:", {
+                    "counter": counter !== null,
+                    "ip-address-sidebar": document.getElementById("ip-address-sidebar") !== null,
+                    "cookie-banner": document.getElementById("cookie-banner") !== null
+                });
+                
+                // Manuell APIs aufrufen
+                if (endpoints && endpoints.get_ip) {
+                    console.log("Teste GET IP API...");
+                    const ipResponse = await fetch(endpoints.get_ip);
+                    const ipText = await ipResponse.text();
+                    console.log("IP-API Antwort:", ipText);
+                    
+                    try {
+                        const ipJson = JSON.parse(ipText);
+                        console.log("IP-API JSON:", ipJson);
+                    } catch(e) {
+                        console.log("IP-API Antwort ist kein gültiges JSON");
+                    }
+                }
+                
+                if (endpoints && endpoints.visitor_counter) {
+                    console.log("Teste Visitor Counter API...");
+                    const counterResponse = await fetch(endpoints.visitor_counter);
+                    const counterText = await counterResponse.text();
+                    console.log("Counter-API Antwort:", counterText);
+                    
+                    try {
+                        const counterJson = JSON.parse(counterText);
+                        console.log("Counter-API JSON:", counterJson);
+                    } catch(e) {
+                        console.log("Counter-API Antwort ist kein gültiges JSON, sondern ein einfacher Wert:", counterText);
+                    }
+                }
+                
+                // Versuch die Werte manuell zu setzen
+                console.log("Versuche IP-Adresse und Counter manuell zu setzen...");
+                const ipElement = document.getElementById("ip-address-sidebar");
+                if (ipElement) {
+                    ipElement.innerText = "Manuell gesetzt (Debug)";
+                    console.log("IP-Element manuell gesetzt");
+                }
+                
+                if (counter) {
+                    counter.innerHTML = "👀 Views: 999 (Debug)";
+                    console.log("Counter-Element manuell gesetzt");
+                }
+                
+                console.log("--- DEBUG ENDE ---");
+                
+            } catch (error) {
+                console.error("Debug-Fehler:", error);
+            }
+        });
+        
+        document.body.appendChild(debugButton);
+    }
 });
 
 // Umgebungs-Banner hinzufügen
