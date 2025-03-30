@@ -33,12 +33,7 @@ resource "aws_lambda_function" "feedback_api" {
 resource "aws_lambda_function_url" "feedback_api_url" {
   function_name      = aws_lambda_function.feedback_api.function_name
   authorization_type = "NONE"
-  cors {
-    allow_origins     = ["*"]
-    allow_methods     = ["*"]  # Änderung hier: Wildcard statt spezifischer Methoden
-    allow_headers     = ["content-type", "accept"]
-    max_age           = 300
-  }
+  # CORS-Block entfernt
 }
 
 resource "aws_iam_role" "lambda_role" {
