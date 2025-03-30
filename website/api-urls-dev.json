@@ -1,0 +1,5 @@
+{
+    "visitor_counter": "https://i2cy6m7iulxotudls2jufbhkam0uwmzc.lambda-url.eu-north-1.on.aws/",
+    "feedback_api": "https://i6u7w2ffvacxwsk274vwfcvkly0btobk.lambda-url.eu-north-1.on.aws/",
+    "get_ip": "https://8gv86zqm2d.execute-api.eu-north-1.amazonaws.com/dev/get_ip"
+  }

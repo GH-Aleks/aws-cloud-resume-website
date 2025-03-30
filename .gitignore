@@ -30,7 +30,7 @@ crash.log
 terraform.rc
 
 # Terraform-Ausgabe-Dateien
-api-urls-*.json
+# api-urls-*.json
 terraform-output-*.json
 terraform/**/outputs/*.json
 
