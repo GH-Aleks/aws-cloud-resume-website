@@ -101,6 +101,10 @@ input, select, textarea {
 		background: #000000;
 	}
 
+	body:not(.is-landing) {
+		background: #222222;
+	}
+
 		body.is-preload *, body.is-preload *:before, body.is-preload *:after {
 			-moz-animation: none !important;
 			-webkit-animation: none !important;
@@ -3371,7 +3375,7 @@ input, select, textarea {
 		display: -webkit-flex;
 		display: -ms-flex;
 		display: flex;
-		background-color: #333333;
+		background-color: #111111;
 		cursor: default;
 		padding: 1.75em 2em;
 	}
@@ -3382,6 +3386,7 @@ input, select, textarea {
 			display: block;
 			font-size: 1.25em;
 			font-weight: bold;
+			padding-top: 1.5em;
 		}
 
 		#header > nav {
@@ -3390,6 +3395,8 @@ input, select, textarea {
 			-ms-flex: 1;
 			flex: 1;
 			text-align: right;
+			padding-top: 2.2em;
+			margin-right: 4em;
 		}
 
 			#header > nav > ul {
